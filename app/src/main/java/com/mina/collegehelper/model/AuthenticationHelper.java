@@ -43,6 +43,8 @@ public class AuthenticationHelper {
 
 class LoginCompleteHandler implements OnCompleteListener<AuthResult> {
 
+    private String LOGIN_GENERAL_ERROR = "Can't Login,  try again later";
+
     ServerCallback response;
 
     public LoginCompleteHandler(ServerCallback response) {
@@ -55,7 +57,7 @@ class LoginCompleteHandler implements OnCompleteListener<AuthResult> {
             FirebaseUser user = authRef.getCurrentUser();
             response.onFinish(ServerResponse.success(user));
         } else {
-            response.onFinish(ServerResponse.error("Authentication failed."));
+            response.onFinish(ServerResponse.error(LOGIN_GENERAL_ERROR));
         }
     }
 
