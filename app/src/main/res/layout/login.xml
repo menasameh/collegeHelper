@@ -1,10 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-   xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.mina.collegehelper.Login">
+    tools:context="com.mina.collegehelper.activities.Login">
+
+    <ImageView
+        android:id="@+id/logo"
+
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+
+        android:src="@mipmap/ic_launcher"
+        android:scaleType="fitCenter"
+    />
+
+
+    <EditText
+        android:id="@+id/emailTextView"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:inputType="textEmailAddress"
+        android:hint="Email"
+
+        android:layout_below="@id/logo"
+
+     />
+
+    <EditText
+        android:id="@+id/passwordTextView"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:inputType="numberPassword"
+        android:hint="Password"
+
+        android:layout_below="@id/emailTextView"
+        />
 
 
 
-</android.support.constraint.ConstraintLayout>
+    <Button
+        android:id="@+id/loginButton"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Login"
+
+        android:layout_alignParentBottom="true"
+        />
+</RelativeLayout>
