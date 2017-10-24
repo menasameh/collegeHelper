@@ -28,14 +28,14 @@ public class AuthenticationHelper {
         }
     }
 
-    public static Boolean login(String email, String password, final ServerCallback response) {
+    public static void login(String email, String password, final ServerCallback response) {
         authRef.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new LoginCompleteHandler(response));
-        return false;
     }
 
-    public static Boolean signup() {
-        return false;
+    public static void signup(String email, String password, final ServerCallback response) {
+        authRef.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(new SignUpCompleteHandler(response));
     }
 
 }
@@ -60,5 +60,26 @@ class LoginCompleteHandler implements OnCompleteListener<AuthResult> {
             response.onFinish(ServerResponse.error(LOGIN_GENERAL_ERROR));
         }
     }
+}
 
+
+class SignUpCompleteHandler implements OnCompleteListener<AuthResult> {
+
+    private String LOGIN_GENERAL_ERROR = "Can't Login,  try again later";
+
+    ServerCallback response;
+
+    public SignUpCompleteHandler(ServerCallback response) {
+        this.response = response;
+    }
+
+    @Override
+    public void onComplete(@NonNull Task<AuthResult> task) {
+        if (task.isSuccessful()) {
+            FirebaseUser user = authRef.getCurrentUser();
+            response.onFinish(ServerResponse.success(user));
+        } else {
+            response.onFinish(ServerResponse.error(LOGIN_GENERAL_ERROR));
+        }
+    }
 }

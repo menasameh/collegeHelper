@@ -8,6 +8,7 @@ import com.google.firebase.database.DataSnapshot;
 
 public class User {
 
+    public String id;
     public String name;
     public String email;
 
@@ -16,6 +17,7 @@ public class User {
     }
 
     public User(User other){
+        this.id = other.id;
         this.name = other.name;
         this.email = other.email;
     }

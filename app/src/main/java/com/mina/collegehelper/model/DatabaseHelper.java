@@ -23,10 +23,10 @@ public class DatabaseHelper {
     static String USERS_REF = "users";
 
     static void getUsers(final ServerCallback callback) {
-        DatabaseReference myRef = database.getReference(USERS_REF);
+        DatabaseReference ref = database.getReference(USERS_REF);
 
         final ArrayList<User> users = new ArrayList<User>();
-        myRef.addValueEventListener(new ValueEventListener() {
+        ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -45,9 +45,9 @@ public class DatabaseHelper {
     }
 
     static void getUser(String id, final ServerCallback callback) {
-        DatabaseReference myRef = database.getReference(USERS_REF).child(id);
+        DatabaseReference ref = database.getReference(USERS_REF).child(id);
 
-        myRef.addValueEventListener(new ValueEventListener() {
+        ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User u = dataSnapshot.getValue(User.class);
@@ -60,4 +60,21 @@ public class DatabaseHelper {
             }
         });
     }
+
+    static void saveUser(User user, final ServerCallback callback) {
+        DatabaseReference ref = database.getReference(USERS_REF).child(user.id);
+        ref.setValue(user, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                if(databaseError == null) {
+                    callback.onFinish(ServerResponse.success(null));
+                } else {
+                    callback.onFinish(ServerResponse.error(databaseError.getMessage()));
+                }
+            }
+        });
+    }
+
+
+
 }
