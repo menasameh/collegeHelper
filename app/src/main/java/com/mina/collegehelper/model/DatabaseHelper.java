@@ -22,7 +22,7 @@ public class DatabaseHelper {
 
     static String USERS_REF = "users";
 
-    static void getUsers(final ServerCallback callback) {
+    public static void getUsers(final ServerCallback callback) {
         DatabaseReference ref = database.getReference(USERS_REF);
 
         final ArrayList<User> users = new ArrayList<User>();
@@ -44,7 +44,7 @@ public class DatabaseHelper {
         });
     }
 
-    static void getUser(String id, final ServerCallback callback) {
+    public static void getUser(String id, final ServerCallback callback) {
         DatabaseReference ref = database.getReference(USERS_REF).child(id);
 
         ref.addValueEventListener(new ValueEventListener() {
@@ -61,7 +61,7 @@ public class DatabaseHelper {
         });
     }
 
-    static void saveUser(User user, final ServerCallback callback) {
+    public static void saveUser(User user, final ServerCallback callback) {
         DatabaseReference ref = database.getReference(USERS_REF).child(user.id);
         ref.setValue(user, new DatabaseReference.CompletionListener() {
             @Override

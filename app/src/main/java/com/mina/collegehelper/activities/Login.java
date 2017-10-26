@@ -21,6 +21,7 @@ public class Login extends BaseActivity {
     private TextView emailTextView;
     private TextView passwordTextView;
     private Button loginButton;
+    private Button regButton;
 
     private String email;
     private String password;
@@ -38,6 +39,7 @@ public class Login extends BaseActivity {
         emailTextView = getViewById(R.id.emailTextView);
         passwordTextView = getViewById(R.id.passwordTextView);
         loginButton = getViewById(R.id.loginButton);
+        regButton = getViewById(R.id.regButton);
     }
 
     private void setupHandlers() {
@@ -50,6 +52,14 @@ public class Login extends BaseActivity {
                 }
             }
         });
+
+        regButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToRegisteration();
+            }
+        });
+
     }
 
     private void collectParameters() {
@@ -64,7 +74,7 @@ public class Login extends BaseActivity {
         }
 
         if (!Validator.validatePassword(password)) {
-            emailTextView.setError(INVALID_PASSWORD);
+            passwordTextView.setError(INVALID_PASSWORD);
             return false;
         }
 
@@ -86,5 +96,10 @@ public class Login extends BaseActivity {
 
     private void goToHome() {
         startActivity(new Intent(Login.this, Home.class));
+        finish();
+    }
+
+    private void goToRegisteration() {
+        startActivity(new Intent(Login.this, Registeration.class));
     }
 }

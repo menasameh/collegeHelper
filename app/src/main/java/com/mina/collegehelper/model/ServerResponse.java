@@ -21,6 +21,6 @@ public class ServerResponse {
     }
 
     static ServerResponse error(String error) {
-        return new ServerResponse(true, null, error);
+        return new ServerResponse(false, null, error);
     }
 }
