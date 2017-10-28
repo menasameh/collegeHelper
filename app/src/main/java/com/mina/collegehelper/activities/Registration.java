@@ -131,8 +131,9 @@ public class Registration extends BaseActivity {
     }
 
     private void goToHome() {
-        startActivity(new Intent(Registration.this, Home.class));
-        finish();
+        Intent homeIntent = new Intent(Registration.this, Home.class);
+        homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(homeIntent);
     }
 
     private void collectParameters() {

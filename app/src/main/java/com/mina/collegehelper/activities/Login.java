@@ -101,8 +101,9 @@ public class Login extends BaseActivity {
     }
 
     private void goToHome() {
-        startActivity(new Intent(Login.this, Home.class));
-        finish();
+        Intent homeIntent = new Intent(Login.this, Home.class);
+        homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(homeIntent);
     }
 
     private void goToRegistration() {
