@@ -49,9 +49,6 @@ public class AuthenticationHelper {
 
 
 class LoginCompleteHandler implements OnSuccessListener<AuthResult>, OnFailureListener {
-
-    private String LOGIN_GENERAL_ERROR = "Can't Login,  try again later";
-
     ServerCallback response;
 
     public LoginCompleteHandler(ServerCallback response) {
@@ -73,9 +70,6 @@ class LoginCompleteHandler implements OnSuccessListener<AuthResult>, OnFailureLi
 
 
 class SignUpCompleteHandler implements OnSuccessListener<AuthResult>, OnFailureListener {
-
-//    private String LOGIN_GENERAL_ERROR = "Can't Login,  try again later";
-
     ServerCallback response;
 
     public SignUpCompleteHandler(ServerCallback response) {

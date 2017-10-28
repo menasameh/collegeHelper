@@ -1,5 +1,6 @@
 package com.mina.collegehelper.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -23,6 +24,7 @@ public class Login extends BaseActivity {
     private Button loginButton;
     private Button regButton;
 
+    ProgressDialog dialog;
     private String email;
     private String password;
 
@@ -48,6 +50,7 @@ public class Login extends BaseActivity {
             public void onClick(View v) {
                 collectParameters();
                 if (validateParameters()) {
+                    dialog = ProgressDialog.show(Login.this, "", "Loading. Please wait...", true);
                     login();
                 }
             }
@@ -87,10 +90,11 @@ public class Login extends BaseActivity {
         AuthenticationHelper.login(email, password, new ServerCallback() {
             @Override
             public void onFinish(ServerResponse response) {
+                dialog.hide();
                 if (response.success) {
                     goToHome();
                 } else {
-                    showToast(LOGIN_GENERAL_ERROR);
+                    showToast(response.error);
                 }
             }
         });
