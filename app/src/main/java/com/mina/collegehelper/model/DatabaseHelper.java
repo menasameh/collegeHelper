@@ -1,14 +1,24 @@
 package com.mina.collegehelper.model;
 
+import android.net.Uri;
+import android.support.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.mina.collegehelper.Utils;
 import com.mina.collegehelper.model.datastructure.ServerCallback;
 import com.mina.collegehelper.model.datastructure.User;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -19,8 +29,10 @@ import java.util.Iterator;
 public class DatabaseHelper {
 
     static FirebaseDatabase database = FirebaseDatabase.getInstance();
+    static StorageReference imagesStorage = FirebaseStorage.getInstance().getReference().child("images");
 
     static String USERS_REF = "users";
+    static String IMAGE_REF = "image";
 
     public static void getUsers(final ServerCallback callback) {
         DatabaseReference ref = database.getReference(USERS_REF);
@@ -75,6 +87,35 @@ public class DatabaseHelper {
         });
     }
 
+    public static void saveImageToUser(final String userID, Uri image, final ServerCallback callback) {
+        StorageReference userImage = imagesStorage.child(userID);
+        UploadTask uploadTask = userImage.putFile(image);
+
+        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                DatabaseReference ref = database.getReference(USERS_REF).child(userID).child(IMAGE_REF);
+                ref.setValue(taskSnapshot.getDownloadUrl().toString(), new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                        if(databaseError == null) {
+                            callback.onFinish(ServerResponse.success(null));
+                        } else {
+                            callback.onFinish(ServerResponse.error(databaseError.getMessage()));
+                        }
+                    }
+                });
+            }
+        });
+
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                callback.onFinish(ServerResponse.error(exception.getMessage()));
+            }
+        });
+
+    }
 
 
 }

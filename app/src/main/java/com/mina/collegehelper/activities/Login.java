@@ -88,7 +88,7 @@ public class Login extends BaseActivity {
                 if (response.success) {
                     goToHome();
                 } else {
-                    ShowToast(LOGIN_GENERAL_ERROR);
+                    showToast(LOGIN_GENERAL_ERROR);
                 }
             }
         });
