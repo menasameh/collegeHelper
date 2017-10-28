@@ -69,11 +69,13 @@ public class Login extends BaseActivity {
 
     private boolean validateParameters() {
         if (!Validator.validateEmail(email)) {
+            emailTextView.requestFocus();
             emailTextView.setError(INVALID_EMAIL);
             return false;
         }
 
         if (!Validator.validatePassword(password)) {
+            passwordTextView.requestFocus();
             passwordTextView.setError(INVALID_PASSWORD);
             return false;
         }
