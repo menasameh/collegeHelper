@@ -59,9 +59,9 @@ public class Registeration extends BaseActivity {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog = ProgressDialog.show(Registeration.this, "", "Loading. Please wait...", true);
                 collectParameters();
                 if (validateParameters()) {
+                    dialog = ProgressDialog.show(Registeration.this, "", "Loading. Please wait...", true);
                     signUp();
                 }
             }
@@ -112,16 +112,19 @@ public class Registeration extends BaseActivity {
 
     private boolean validateParameters() {
         if (!Validator.validateName(name)) {
+            nameTextView.requestFocus();
             nameTextView.setError(INVALID_NAME);
             return false;
         }
 
         if (!Validator.validateEmail(email)) {
+            emailTextView.requestFocus();
             emailTextView.setError(INVALID_EMAIL);
             return false;
         }
 
         if (!Validator.validatePassword(password)) {
+            passwordTextView.requestFocus();
             passwordTextView.setError(INVALID_PASSWORD);
             return false;
         }
