@@ -1,8 +1,12 @@
 package com.mina.collegehelper.model;
 
+import android.drm.DrmErrorEvent;
+import android.drm.DrmManagerClient;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,20 +32,23 @@ public class AuthenticationHelper {
         }
     }
 
-    public static Boolean login(String email, String password, final ServerCallback response) {
+    public static void login(String email, String password, final ServerCallback response) {
         authRef.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(new LoginCompleteHandler(response));
-        return false;
+                .addOnSuccessListener(new LoginCompleteHandler(response))
+                .addOnFailureListener(new LoginCompleteHandler(response));
     }
 
-    public static Boolean signup() {
-        return false;
+    public static void signup(String email, String password, final ServerCallback response) {
+        authRef.createUserWithEmailAndPassword(email, password)
+                .addOnSuccessListener(new SignUpCompleteHandler(response))
+                .addOnFailureListener(new SignUpCompleteHandler(response));
+
     }
 
 }
 
 
-class LoginCompleteHandler implements OnCompleteListener<AuthResult> {
+class LoginCompleteHandler implements OnSuccessListener<AuthResult>, OnFailureListener {
 
     private String LOGIN_GENERAL_ERROR = "Can't Login,  try again later";
 
@@ -51,14 +58,38 @@ class LoginCompleteHandler implements OnCompleteListener<AuthResult> {
         this.response = response;
     }
 
+
     @Override
-    public void onComplete(@NonNull Task<AuthResult> task) {
-        if (task.isSuccessful()) {
-            FirebaseUser user = authRef.getCurrentUser();
-            response.onFinish(ServerResponse.success(user));
-        } else {
-            response.onFinish(ServerResponse.error(LOGIN_GENERAL_ERROR));
-        }
+    public void onSuccess(AuthResult authResult) {
+        FirebaseUser user = authRef.getCurrentUser();
+        response.onFinish(ServerResponse.success(user));
     }
 
+    @Override
+    public void onFailure(@NonNull Exception e) {
+        response.onFinish(ServerResponse.error(e.getMessage()));
+    }
+}
+
+
+class SignUpCompleteHandler implements OnSuccessListener<AuthResult>, OnFailureListener {
+
+//    private String LOGIN_GENERAL_ERROR = "Can't Login,  try again later";
+
+    ServerCallback response;
+
+    public SignUpCompleteHandler(ServerCallback response) {
+        this.response = response;
+    }
+
+    @Override
+    public void onSuccess(AuthResult authResult) {
+        FirebaseUser user = authRef.getCurrentUser();
+        response.onFinish(ServerResponse.success(user));
+    }
+
+    @Override
+    public void onFailure(@NonNull Exception e) {
+        response.onFinish(ServerResponse.error(e.getMessage()));
+    }
 }

@@ -6,6 +6,10 @@ package com.mina.collegehelper;
 
 public class Validator {
 
+    public static Boolean validateName(String name) {
+        return true;
+    }
+
     public static Boolean validateEmail(String email) {
         return true;
     }
