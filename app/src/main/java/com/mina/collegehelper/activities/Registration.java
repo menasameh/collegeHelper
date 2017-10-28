@@ -1,7 +1,6 @@
 package com.mina.collegehelper.activities;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -17,7 +16,7 @@ import com.mina.collegehelper.model.ServerResponse;
 import com.mina.collegehelper.model.datastructure.ServerCallback;
 import com.mina.collegehelper.model.datastructure.User;
 
-public class Registeration extends BaseActivity {
+public class Registration extends BaseActivity {
 
     private String INVALID_NAME = "Invalid or empty Name";
     private String INVALID_EMAIL = "Invalid or empty Email";
@@ -42,7 +41,7 @@ public class Registeration extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.registeration);
+        setContentView(R.layout.registration);
         setupUI();
         setupHandlers();
     }
@@ -59,7 +58,7 @@ public class Registeration extends BaseActivity {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog = ProgressDialog.show(Registeration.this, "", "Loading. Please wait...", true);
+                dialog = ProgressDialog.show(Registration.this, "", "Loading. Please wait...", true);
                 collectParameters();
                 if (validateParameters()) {
                     signUp();

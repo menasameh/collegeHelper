@@ -56,7 +56,7 @@ public class Login extends BaseActivity {
         regButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToRegisteration();
+                goToRegistration();
             }
         });
 
@@ -99,7 +99,7 @@ public class Login extends BaseActivity {
         finish();
     }
 
-    private void goToRegisteration() {
-        startActivity(new Intent(Login.this, Registeration.class));
+    private void goToRegistration() {
+        startActivity(new Intent(Login.this, Registration.class));
     }
 }
