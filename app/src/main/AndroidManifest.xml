@@ -20,7 +20,7 @@
             android:name=".activities.Home"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.Registeration"></activity>
+        <activity android:name=".activities.Registration"></activity>
     </application>
 
 </manifest>

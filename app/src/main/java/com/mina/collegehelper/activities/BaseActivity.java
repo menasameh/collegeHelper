@@ -13,7 +13,7 @@ public class BaseActivity extends AppCompatActivity {
         return (T) findViewById(id);
     }
 
-    public void ShowToast(String text) {
+    public void showToast(String text) {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
 
