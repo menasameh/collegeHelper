@@ -15,6 +15,7 @@ import com.mina.collegehelper.model.datastructure.ServerCallback;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class Login extends BaseActivity {
 
@@ -35,37 +36,21 @@ public class Login extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-//        setupUI();
         ButterKnife.bind(this);
-        setupHandlers();
     }
 
-//    private void setupUI() {
-//        emailTextView = getViewById(R.id.emailTextView);
-//        passwordTextView = getViewById(R.id.passwordTextView);
-//        loginButton = getViewById(R.id.loginButton);
-//        regButton = getViewById(R.id.regButton);
-//    }
+    @OnClick(R.id.loginButton)
+    void loginButtonAction() {
+        collectParameters();
+        if (validateParameters()) {
+            dialog = ProgressDialog.show(Login.this, "", "Loading. Please wait...", true);
+            login();
+        }
+    }
 
-    private void setupHandlers() {
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                collectParameters();
-                if (validateParameters()) {
-                    dialog = ProgressDialog.show(Login.this, "", "Loading. Please wait...", true);
-                    login();
-                }
-            }
-        });
-
-        regButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToRegistration();
-            }
-        });
-
+    @OnClick(R.id.regButton)
+    void registrationButtonAction() {
+        goToRegistration();
     }
 
     private void collectParameters() {
@@ -85,7 +70,6 @@ public class Login extends BaseActivity {
             passwordTextView.setError(INVALID_PASSWORD);
             return false;
         }
-
         return true;
     }
 

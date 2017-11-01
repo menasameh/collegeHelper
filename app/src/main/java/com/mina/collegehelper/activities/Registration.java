@@ -20,6 +20,7 @@ import com.mina.collegehelper.model.datastructure.User;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class Registration extends BaseActivity {
 
@@ -49,39 +50,26 @@ public class Registration extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.registration);
-//        setupUI();
         ButterKnife.bind(this);
-        setupHandlers();
     }
 
-//    private void setupUI() {
-//        profilePictureImage = getViewById(R.id.profilePicture);
-//        nameTextView = getViewById(R.id.nameTextView);
-//        emailTextView = getViewById(R.id.emailTextView);
-//        passwordTextView = getViewById(R.id.passwordTextView);
-//        signUpButton = getViewById(R.id.regButton);
-//    }
+    @OnClick(R.id.regButton)
+    void signUpButtonAction() {
+        dialog = ProgressDialog.show(Registration.this, "", "Loading. Please wait...", true);
+        collectParameters();
+        if (validateParameters()) {
+            signUp();
+        } else {
+            dialog.hide();
+            dialog.dismiss();
+        }
+    }
 
-    private void setupHandlers() {
-        signUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog = ProgressDialog.show(Registration.this, "", "Loading. Please wait...", true);
-                collectParameters();
-                if (validateParameters()) {
-                    signUp();
-                }
-            }
-        });
-        profilePictureImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent pickPhoto = new Intent(Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(pickPhoto , 1);
-            }
-        });
-
+    @OnClick(R.id.profilePicture)
+    void chooseImageAction() {
+        Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(pickPhoto , 1);
     }
 
     private void signUp() {
@@ -94,6 +82,7 @@ public class Registration extends BaseActivity {
                 } else {
                     showToast(response.error);
                     dialog.hide();
+                    dialog.dismiss();
                 }
             }
         });
@@ -104,6 +93,7 @@ public class Registration extends BaseActivity {
             @Override
             public void onFinish(ServerResponse response) {
                 dialog.hide();
+                dialog.dismiss();
                 if (response.success) {
                     uploadImage();
                     goToHome();
