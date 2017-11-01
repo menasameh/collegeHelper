@@ -18,6 +18,10 @@ import com.mina.collegehelper.model.ServerResponse;
 import com.mina.collegehelper.model.datastructure.ServerCallback;
 import com.mina.collegehelper.model.datastructure.User;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class Registration extends BaseActivity {
 
     private String INVALID_NAME = "Invalid or empty Name";
@@ -28,12 +32,11 @@ public class Registration extends BaseActivity {
     private String IMAGE_UPLOADED = "Image uploaded successfully";
     private String IMAGE_UPLOAD_IN_PROGRESS = "Image upload in progress";
 
-    private ImageButton profilePictureImage;
-    private TextView nameTextView;
-    private TextView emailTextView;
-    private TextView passwordTextView;
-
-    private Button signUpButton;
+    @BindView(R.id.profilePicture) ImageButton profilePictureImage;
+    @BindView(R.id.nameTextView) TextView nameTextView;
+    @BindView(R.id.emailTextView) TextView emailTextView;
+    @BindView(R.id.passwordTextView) TextView passwordTextView;
+    @BindView(R.id.regButton) Button signUpButton;
 
     ProgressDialog dialog;
     private String name;
@@ -47,38 +50,26 @@ public class Registration extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.registration);
-        setupUI();
-        setupHandlers();
+        ButterKnife.bind(this);
     }
 
-    private void setupUI() {
-        profilePictureImage = getViewById(R.id.profilePicture);
-        nameTextView = getViewById(R.id.nameTextView);
-        emailTextView = getViewById(R.id.emailTextView);
-        passwordTextView = getViewById(R.id.passwordTextView);
-        signUpButton = getViewById(R.id.regButton);
+    @OnClick(R.id.regButton)
+    void signUpButtonAction() {
+        dialog = ProgressDialog.show(Registration.this, "", "Loading. Please wait...", true);
+        collectParameters();
+        if (validateParameters()) {
+            signUp();
+        } else {
+            dialog.hide();
+            dialog.dismiss();
+        }
     }
 
-    private void setupHandlers() {
-        signUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog = ProgressDialog.show(Registration.this, "", "Loading. Please wait...", true);
-                collectParameters();
-                if (validateParameters()) {
-                    signUp();
-                }
-            }
-        });
-        profilePictureImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent pickPhoto = new Intent(Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(pickPhoto , 1);
-            }
-        });
-
+    @OnClick(R.id.profilePicture)
+    void chooseImageAction() {
+        Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(pickPhoto , 1);
     }
 
     private void signUp() {
@@ -91,6 +82,7 @@ public class Registration extends BaseActivity {
                 } else {
                     showToast(response.error);
                     dialog.hide();
+                    dialog.dismiss();
                 }
             }
         });
@@ -101,6 +93,7 @@ public class Registration extends BaseActivity {
             @Override
             public void onFinish(ServerResponse response) {
                 dialog.hide();
+                dialog.dismiss();
                 if (response.success) {
                     uploadImage();
                     goToHome();
