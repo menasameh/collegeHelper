@@ -18,6 +18,9 @@ import com.mina.collegehelper.model.ServerResponse;
 import com.mina.collegehelper.model.datastructure.ServerCallback;
 import com.mina.collegehelper.model.datastructure.User;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class Registration extends BaseActivity {
 
     private String INVALID_NAME = "Invalid or empty Name";
@@ -28,12 +31,11 @@ public class Registration extends BaseActivity {
     private String IMAGE_UPLOADED = "Image uploaded successfully";
     private String IMAGE_UPLOAD_IN_PROGRESS = "Image upload in progress";
 
-    private ImageButton profilePictureImage;
-    private TextView nameTextView;
-    private TextView emailTextView;
-    private TextView passwordTextView;
-
-    private Button signUpButton;
+    @BindView(R.id.profilePicture) ImageButton profilePictureImage;
+    @BindView(R.id.nameTextView) TextView nameTextView;
+    @BindView(R.id.emailTextView) TextView emailTextView;
+    @BindView(R.id.passwordTextView) TextView passwordTextView;
+    @BindView(R.id.regButton) Button signUpButton;
 
     ProgressDialog dialog;
     private String name;
@@ -47,17 +49,18 @@ public class Registration extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.registration);
-        setupUI();
+//        setupUI();
+        ButterKnife.bind(this);
         setupHandlers();
     }
 
-    private void setupUI() {
-        profilePictureImage = getViewById(R.id.profilePicture);
-        nameTextView = getViewById(R.id.nameTextView);
-        emailTextView = getViewById(R.id.emailTextView);
-        passwordTextView = getViewById(R.id.passwordTextView);
-        signUpButton = getViewById(R.id.regButton);
-    }
+//    private void setupUI() {
+//        profilePictureImage = getViewById(R.id.profilePicture);
+//        nameTextView = getViewById(R.id.nameTextView);
+//        emailTextView = getViewById(R.id.emailTextView);
+//        passwordTextView = getViewById(R.id.passwordTextView);
+//        signUpButton = getViewById(R.id.regButton);
+//    }
 
     private void setupHandlers() {
         signUpButton.setOnClickListener(new View.OnClickListener() {

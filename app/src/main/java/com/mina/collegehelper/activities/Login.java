@@ -13,18 +13,20 @@ import com.mina.collegehelper.model.AuthenticationHelper;
 import com.mina.collegehelper.model.ServerResponse;
 import com.mina.collegehelper.model.datastructure.ServerCallback;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class Login extends BaseActivity {
 
     private String INVALID_EMAIL = "Invalid or empty Email";
     private String INVALID_PASSWORD = "Invalid or empty password";
-    private String LOGIN_GENERAL_ERROR = "Can't Login,  try again later";
 
-    private TextView emailTextView;
-    private TextView passwordTextView;
-    private Button loginButton;
-    private Button regButton;
+    @BindView(R.id.emailTextView) TextView emailTextView;
+    @BindView(R.id.passwordTextView) TextView passwordTextView;
+    @BindView(R.id.loginButton) Button loginButton;
+    @BindView(R.id.regButton) Button regButton;
 
-    ProgressDialog dialog;
+    private ProgressDialog dialog;
     private String email;
     private String password;
 
@@ -33,16 +35,17 @@ public class Login extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-        setupUI();
+//        setupUI();
+        ButterKnife.bind(this);
         setupHandlers();
     }
 
-    private void setupUI() {
-        emailTextView = getViewById(R.id.emailTextView);
-        passwordTextView = getViewById(R.id.passwordTextView);
-        loginButton = getViewById(R.id.loginButton);
-        regButton = getViewById(R.id.regButton);
-    }
+//    private void setupUI() {
+//        emailTextView = getViewById(R.id.emailTextView);
+//        passwordTextView = getViewById(R.id.passwordTextView);
+//        loginButton = getViewById(R.id.loginButton);
+//        regButton = getViewById(R.id.regButton);
+//    }
 
     private void setupHandlers() {
         loginButton.setOnClickListener(new View.OnClickListener() {
