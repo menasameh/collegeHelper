@@ -15,6 +15,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.mina.collegehelper.Utils;
+import com.mina.collegehelper.model.datastructure.Code;
 import com.mina.collegehelper.model.datastructure.ServerCallback;
 import com.mina.collegehelper.model.datastructure.User;
 
@@ -28,10 +29,13 @@ import java.util.Iterator;
 
 public class DatabaseHelper {
 
+    private static String CODE_NOT_FOUND = "Code is not available";
+
     static FirebaseDatabase database = FirebaseDatabase.getInstance();
     static StorageReference imagesStorage = FirebaseStorage.getInstance().getReference().child("images");
 
     static String USERS_REF = "users";
+    static String CODES_REF = "codes";
     static String IMAGE_REF = "image";
 
     public static void getUsers(final ServerCallback callback) {
@@ -69,6 +73,41 @@ public class DatabaseHelper {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 callback.onFinish(ServerResponse.error(databaseError.getMessage()));
+            }
+        });
+    }
+
+    public static void checkCode(String id, final ServerCallback callback) {
+        DatabaseReference ref = database.getReference(CODES_REF).child(id);
+
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Code c = dataSnapshot.getValue(Code.class);
+                if (c == null) {
+                    callback.onFinish(ServerResponse.error(CODE_NOT_FOUND));
+                } else {
+                    callback.onFinish(ServerResponse.success(c));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                callback.onFinish(ServerResponse.error(databaseError.getMessage()));
+            }
+        });
+    }
+
+    public static void useCode(String id, final ServerCallback callback) {
+        DatabaseReference ref = database.getReference(CODES_REF).child(id);
+        ref.setValue(true, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                if(databaseError == null) {
+                    callback.onFinish(ServerResponse.success(null));
+                } else {
+                    callback.onFinish(ServerResponse.error(databaseError.getMessage()));
+                }
             }
         });
     }
