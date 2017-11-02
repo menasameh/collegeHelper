@@ -26,7 +26,7 @@ import java.util.Iterator;
 /**
  * Created by mina on 19/10/17.
  */
-
+//TODO: check if firebase listens for more than one time
 public class DatabaseHelper {
 
     private static String CODE_NOT_FOUND = "Code is not available";
@@ -36,6 +36,7 @@ public class DatabaseHelper {
 
     static String USERS_REF = "users";
     static String CODES_REF = "codes";
+    static String CODE_VALID_REF = "valid";
     static String IMAGE_REF = "image";
 
     public static void getUsers(final ServerCallback callback) {
@@ -77,17 +78,16 @@ public class DatabaseHelper {
         });
     }
 
-    public static void checkCode(String id, final ServerCallback callback) {
-        DatabaseReference ref = database.getReference(CODES_REF).child(id);
-
-        ref.addValueEventListener(new ValueEventListener() {
+    public static void checkCode(final String id, final ServerCallback callback) {
+        DatabaseReference ref = database.getReference(CODES_REF);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Code c = dataSnapshot.getValue(Code.class);
-                if (c == null) {
-                    callback.onFinish(ServerResponse.error(CODE_NOT_FOUND));
-                } else {
+            public void onDataChange(DataSnapshot snapshot) {
+                if (snapshot.hasChild(id)) {
+                    Code c = snapshot.child(id).getValue(Code.class);
                     callback.onFinish(ServerResponse.success(c));
+                } else {
+                    callback.onFinish(ServerResponse.error(CODE_NOT_FOUND));
                 }
             }
 
@@ -99,7 +99,7 @@ public class DatabaseHelper {
     }
 
     public static void useCode(String id, final ServerCallback callback) {
-        DatabaseReference ref = database.getReference(CODES_REF).child(id);
+        DatabaseReference ref = database.getReference(CODES_REF).child(id).child(CODE_VALID_REF);
         ref.setValue(true, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {

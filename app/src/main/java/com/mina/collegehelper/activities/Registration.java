@@ -179,6 +179,10 @@ public class Registration extends BaseActivity {
         password = passwordTextView.getText().toString();
         name = nameTextView.getText().toString();
         code = codeTextView.getText().toString();
+//        email = "m@m.com";
+//        password = "123456";
+//        name = "mina";
+//        code = "qwertyuiop";
         regUser.email = email;
         regUser.name = name;
     }
