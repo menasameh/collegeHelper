@@ -15,6 +15,7 @@ import com.mina.collegehelper.Validator;
 import com.mina.collegehelper.model.AuthenticationHelper;
 import com.mina.collegehelper.model.DatabaseHelper;
 import com.mina.collegehelper.model.ServerResponse;
+import com.mina.collegehelper.model.datastructure.Code;
 import com.mina.collegehelper.model.datastructure.ServerCallback;
 import com.mina.collegehelper.model.datastructure.User;
 
@@ -28,6 +29,8 @@ public class Registration extends BaseActivity {
     private String INVALID_EMAIL = "Invalid or empty Email";
     private String INVALID_PASSWORD = "Invalid or empty password";
     private String LOGIN_GENERAL_ERROR = "Can't Login,  try again later";
+    private String INVALID_CODE = "Invalid code";
+    private String USED_CODE = "This code was used before";
 
     private String IMAGE_UPLOADED = "Image uploaded successfully";
     private String IMAGE_UPLOAD_IN_PROGRESS = "Image upload in progress";
@@ -36,12 +39,15 @@ public class Registration extends BaseActivity {
     @BindView(R.id.nameTextView) TextView nameTextView;
     @BindView(R.id.emailTextView) TextView emailTextView;
     @BindView(R.id.passwordTextView) TextView passwordTextView;
+    @BindView(R.id.codeTextView) TextView codeTextView;
+
     @BindView(R.id.regButton) Button signUpButton;
 
     ProgressDialog dialog;
     private String name;
     private String email;
     private String password;
+    private String code;
 
     private Uri profilePictureUrl;
     private User regUser;
@@ -58,7 +64,7 @@ public class Registration extends BaseActivity {
         dialog = ProgressDialog.show(Registration.this, "", "Loading. Please wait...", true);
         collectParameters();
         if (validateParameters()) {
-            signUp();
+            checkCode();
         } else {
             dialog.hide();
             dialog.dismiss();
@@ -72,7 +78,45 @@ public class Registration extends BaseActivity {
         startActivityForResult(pickPhoto , 1);
     }
 
-    private void signUp() {
+    private void checkCode() {
+        DatabaseHelper.checkCode(code, new ServerCallback() {
+            @Override
+            public void onFinish(ServerResponse response) {
+                if (response.success) {
+                    Code code = (Code) response.data;
+                    if(code.valid) {
+                        regUser.type = code.type;
+                        useCode();
+                    } else {
+                        dialog.hide();
+                        dialog.dismiss();
+                        showToast(USED_CODE);
+                    }
+                } else {
+                    dialog.hide();
+                    dialog.dismiss();
+                    showToast(response.error);
+                }
+            }
+        });
+    }
+
+    private void useCode() {
+        DatabaseHelper.useCode(code, new ServerCallback() {
+            @Override
+            public void onFinish(ServerResponse response) {
+                if (response.success) {
+                    signUpUser();
+                } else {
+                    dialog.hide();
+                    dialog.dismiss();
+                    showToast(response.error);
+                }
+            }
+        });
+    }
+
+    private void signUpUser() {
         AuthenticationHelper.signup(email, password, new ServerCallback() {
             @Override
             public void onFinish(ServerResponse response) {
@@ -134,6 +178,11 @@ public class Registration extends BaseActivity {
         email = emailTextView.getText().toString();
         password = passwordTextView.getText().toString();
         name = nameTextView.getText().toString();
+        code = codeTextView.getText().toString();
+//        email = "m@m.com";
+//        password = "123456";
+//        name = "mina";
+//        code = "qwertyuiop";
         regUser.email = email;
         regUser.name = name;
     }
@@ -151,6 +200,11 @@ public class Registration extends BaseActivity {
 
         if (!Validator.validatePassword(password)) {
             passwordTextView.setError(INVALID_PASSWORD);
+            return false;
+        }
+
+        if (!Validator.validateCode(code)) {
+            codeTextView.setError(INVALID_CODE);
             return false;
         }
         return true;

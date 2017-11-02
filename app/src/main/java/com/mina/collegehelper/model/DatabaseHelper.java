@@ -15,6 +15,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.mina.collegehelper.Utils;
+import com.mina.collegehelper.model.datastructure.Code;
 import com.mina.collegehelper.model.datastructure.ServerCallback;
 import com.mina.collegehelper.model.datastructure.User;
 
@@ -25,13 +26,18 @@ import java.util.Iterator;
 /**
  * Created by mina on 19/10/17.
  */
-
+//TODO: check if firebase listens for more than one time
 public class DatabaseHelper {
+
+    private static String CODE_NOT_FOUND = "Code is not available";
 
     static FirebaseDatabase database = FirebaseDatabase.getInstance();
     static StorageReference imagesStorage = FirebaseStorage.getInstance().getReference().child("images");
 
     static String USERS_REF = "users";
+    static String CODES_REF = "codes";
+    static String CODE_VALID_REF = "valid";
+
     static String IMAGE_REF = "image";
 
     public static void getUsers(final ServerCallback callback) {
@@ -69,6 +75,40 @@ public class DatabaseHelper {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 callback.onFinish(ServerResponse.error(databaseError.getMessage()));
+            }
+        });
+    }
+
+    public static void checkCode(final String id, final ServerCallback callback) {
+        DatabaseReference ref = database.getReference(CODES_REF);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if (snapshot.hasChild(id)) {
+                    Code c = snapshot.child(id).getValue(Code.class);
+                    callback.onFinish(ServerResponse.success(c));
+                } else {
+                    callback.onFinish(ServerResponse.error(CODE_NOT_FOUND));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                callback.onFinish(ServerResponse.error(databaseError.getMessage()));
+            }
+        });
+    }
+
+    public static void useCode(String id, final ServerCallback callback) {
+        DatabaseReference ref = database.getReference(CODES_REF).child(id).child(CODE_VALID_REF);
+        ref.setValue(true, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                if(databaseError == null) {
+                    callback.onFinish(ServerResponse.success(null));
+                } else {
+                    callback.onFinish(ServerResponse.error(databaseError.getMessage()));
+                }
             }
         });
     }
