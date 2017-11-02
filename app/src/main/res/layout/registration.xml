@@ -15,7 +15,7 @@
         android:src="@mipmap/ic_launcher"
 
         android:layout_centerHorizontal="true"
-        android:layout_margin="20dp"
+        android:layout_margin="15dp"
         />
 
     <EditText
@@ -28,7 +28,7 @@
         android:hint="Name"
 
         android:layout_below="@id/profilePicture"
-        android:layout_margin="20dp"
+        android:layout_margin="15dp"
 
         />
 
@@ -42,7 +42,7 @@
         android:hint="Email"
 
         android:layout_below="@id/nameTextView"
-        android:layout_margin="20dp"
+        android:layout_margin="15dp"
 
         />
 
@@ -52,11 +52,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
-        android:inputType="numberPassword"
+        android:inputType="textPassword"
         android:hint="Password"
 
         android:layout_below="@id/emailTextView"
-        android:layout_margin="20dp"
+        android:layout_margin="15dp"
+        />
+
+    <EditText
+        android:id="@+id/codeTextView"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:inputType="textPassword"
+        android:hint="Code"
+
+        android:layout_below="@id/passwordTextView"
+        android:layout_margin="15dp"
         />
 
 
