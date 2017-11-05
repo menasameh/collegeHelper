@@ -45,6 +45,10 @@ public class AuthenticationHelper {
 
     }
 
+    public static void signOut() {
+        authRef.signOut();
+    }
+
 }
 
 
