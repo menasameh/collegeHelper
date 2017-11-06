@@ -1,13 +1,10 @@
 package com.mina.collegehelper.model;
 
-import android.drm.DrmErrorEvent;
-import android.drm.DrmManagerClient;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -21,7 +18,7 @@ import static com.mina.collegehelper.model.AuthenticationHelper.authRef;
 
 public class AuthenticationHelper {
 
-    protected static FirebaseAuth authRef = FirebaseAuth.getInstance();
+    static FirebaseAuth authRef = FirebaseAuth.getInstance();
 
     public static String getCurrentUserId() {
         FirebaseUser user = authRef.getCurrentUser();
@@ -49,6 +46,13 @@ public class AuthenticationHelper {
         authRef.signOut();
     }
 
+    public static void sendEmailVerification() {
+        authRef.getCurrentUser().sendEmailVerification();
+    }
+
+    public static boolean isEmailVerified() {
+        return authRef.getCurrentUser().isEmailVerified();
+    }
 }
 
 

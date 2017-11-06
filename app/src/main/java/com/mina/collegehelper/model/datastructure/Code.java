@@ -6,6 +6,7 @@ package com.mina.collegehelper.model.datastructure;
 
 public class Code {
     public String type;
+    public String email;
     public boolean valid;
 
     public Code() {
