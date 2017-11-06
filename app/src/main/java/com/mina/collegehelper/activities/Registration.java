@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -25,6 +24,7 @@ import butterknife.OnClick;
 
 public class Registration extends BaseActivity {
 
+    private String CODE_NOT_VALID_FOR_EMAIL = "This code is for another email address";
     private String INVALID_NAME = "Invalid or empty Name";
     private String INVALID_EMAIL = "Invalid or empty Email";
     private String INVALID_PASSWORD = "Invalid or empty password";
@@ -85,8 +85,14 @@ public class Registration extends BaseActivity {
                 if (response.success) {
                     Code code = (Code) response.data;
                     if(code.valid) {
-                        regUser.type = code.type;
-                        useCode();
+                        if(code.email.equals(regUser.email)) {
+                            regUser.type = code.type;
+                            useCode();
+                        } else {
+                            dialog.hide();
+                            dialog.dismiss();
+                            showToast(CODE_NOT_VALID_FOR_EMAIL);
+                        }
                     } else {
                         dialog.hide();
                         dialog.dismiss();
@@ -123,6 +129,7 @@ public class Registration extends BaseActivity {
                 if (response.success) {
                     regUser.id = ((FirebaseUser) response.data).getUid();
                     saveUserToDB(regUser);
+                    AuthenticationHelper.sendEmailVerification();
                 } else {
                     showToast(response.error);
                     dialog.hide();
@@ -140,12 +147,16 @@ public class Registration extends BaseActivity {
                 dialog.dismiss();
                 if (response.success) {
                     uploadImage();
-                    goToHome();
+                    goToLogin();
                 } else {
                     showToast(response.error);
                 }
             }
         });
+    }
+
+    private void goToLogin() {
+        finish();
     }
 
     private void uploadImage() {
@@ -165,12 +176,6 @@ public class Registration extends BaseActivity {
             }
         });
         showToast(IMAGE_UPLOAD_IN_PROGRESS);
-    }
-
-    private void goToHome() {
-        Intent homeIntent = new Intent(Registration.this, Home.class);
-        homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(homeIntent);
     }
 
     private void collectParameters() {

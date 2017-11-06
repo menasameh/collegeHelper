@@ -153,7 +153,6 @@ public class DatabaseHelper {
                 callback.onFinish(ServerResponse.error(exception.getMessage()));
             }
         });
-
     }
 
 

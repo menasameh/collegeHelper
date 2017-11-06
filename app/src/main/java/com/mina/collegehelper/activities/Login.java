@@ -12,6 +12,7 @@ import com.mina.collegehelper.Validator;
 import com.mina.collegehelper.model.AuthenticationHelper;
 import com.mina.collegehelper.model.ServerResponse;
 import com.mina.collegehelper.model.datastructure.ServerCallback;
+import com.mina.collegehelper.model.datastructure.User;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -19,6 +20,7 @@ import butterknife.OnClick;
 
 public class Login extends BaseActivity {
 
+    private String EMAIL_NOT_VERIFIED = "Please verify your email first";
     private String INVALID_EMAIL = "Invalid or empty Email";
     private String INVALID_PASSWORD = "Invalid or empty password";
 
@@ -79,12 +81,23 @@ public class Login extends BaseActivity {
             public void onFinish(ServerResponse response) {
                 dialog.hide();
                 if (response.success) {
-                    goToHome();
+                    if (isEmailVerified()) {
+                        goToHome();
+                    }
                 } else {
                     showToast(response.error);
                 }
             }
         });
+    }
+
+    private boolean isEmailVerified() {
+        if(!AuthenticationHelper.isEmailVerified()) {
+            AuthenticationHelper.signOut();
+            showToast(EMAIL_NOT_VERIFIED);
+            return false;
+        }
+        return true;
     }
 
     private void goToHome() {
