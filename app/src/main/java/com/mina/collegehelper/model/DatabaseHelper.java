@@ -16,6 +16,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.mina.collegehelper.Utils;
 import com.mina.collegehelper.model.datastructure.Code;
+import com.mina.collegehelper.model.datastructure.Course;
 import com.mina.collegehelper.model.datastructure.ServerCallback;
 import com.mina.collegehelper.model.datastructure.User;
 
@@ -31,18 +32,18 @@ public class DatabaseHelper {
 
     private static String CODE_NOT_FOUND = "Code is not available";
 
-    static FirebaseDatabase database = FirebaseDatabase.getInstance();
-    static StorageReference imagesStorage = FirebaseStorage.getInstance().getReference().child("images");
+    private static FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private static StorageReference imagesStorage = FirebaseStorage.getInstance().getReference().child("images");
 
-    static String USERS_REF = "users";
-    static String CODES_REF = "codes";
-    static String CODE_VALID_REF = "valid";
-    static String IMAGE_REF = "image";
+    private static String USERS_REF = "users";
+    private static String CODES_REF = "codes";
+    private static String CODE_VALID_REF = "valid";
+    private static String IMAGE_REF = "image";
 
     public static void getUsers(final ServerCallback callback) {
         DatabaseReference ref = database.getReference(USERS_REF);
 
-        final ArrayList<User> users = new ArrayList<User>();
+        final ArrayList<User> users = new ArrayList();
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -155,5 +156,27 @@ public class DatabaseHelper {
         });
     }
 
+    public static void getUserCourses(final ServerCallback callback) {
+        DatabaseReference ref = database.getReference("courses").child("jdsf");
 
+
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+//                Iterator<DataSnapshot> index = dataSnapshot.getChildren().iterator();
+//                while (index.hasNext()) {
+//                    users.add(index.next().getValue(User.class));
+//                }
+                ArrayList<Course> courses = new ArrayList();
+                courses.add(dataSnapshot.getValue(Course.class));
+                callback.onFinish(ServerResponse.success(courses));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                callback.onFinish(ServerResponse.error(databaseError.getMessage()));
+            }
+        });
+    }
 }

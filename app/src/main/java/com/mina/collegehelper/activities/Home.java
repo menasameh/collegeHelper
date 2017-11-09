@@ -9,9 +9,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.mina.collegehelper.R;
+import com.mina.collegehelper.adapters.CoursesListAdapter;
 import com.mina.collegehelper.model.AuthenticationHelper;
+import com.mina.collegehelper.model.DatabaseHelper;
+import com.mina.collegehelper.model.ServerResponse;
+import com.mina.collegehelper.model.datastructure.Course;
+import com.mina.collegehelper.model.datastructure.ServerCallback;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -19,16 +27,37 @@ import butterknife.OnClick;
 
 public class Home extends BaseActivity {
 
+    @BindView(R.id.coursesList)
+    ListView coursesList;
+    CoursesListAdapter coursesListAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
         ButterKnife.bind(this);
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-//
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        setupUI();
+        loadCourses();
+    }
+
+    private void setupUI() {
+        coursesListAdapter = new CoursesListAdapter(this);
+        coursesList.setAdapter(coursesListAdapter);
+    }
+
+    private void loadCourses() {
+        DatabaseHelper.getUserCourses(new ServerCallback() {
+            @Override
+            public void onFinish(ServerResponse response) {
+                if(response.success) {
+                    coursesListAdapter.setList((ArrayList<Course>) response.data);
+                    coursesListAdapter.notifyDataSetChanged();
+                } else {
+                    showToast(response.error);
+                }
+            }
+        });
     }
 
 
