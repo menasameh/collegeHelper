@@ -43,14 +43,12 @@ public class CoursesListAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        if (list.size() > 0)
-            return 10;
         return list.size();
     }
 
     @Override
     public Course getItem(int position) {
-        return list.get(0);// list.get(position);
+        return list.get(position);
     }
 
     @Override

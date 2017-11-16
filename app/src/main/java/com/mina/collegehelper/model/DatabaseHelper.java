@@ -157,19 +157,18 @@ public class DatabaseHelper {
     }
 
     public static void getUserCourses(final ServerCallback callback) {
-        DatabaseReference ref = database.getReference("courses").child("jdsf");
+        DatabaseReference ref = database.getReference("courses");
 
 
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-//                Iterator<DataSnapshot> index = dataSnapshot.getChildren().iterator();
-//                while (index.hasNext()) {
-//                    users.add(index.next().getValue(User.class));
-//                }
                 ArrayList<Course> courses = new ArrayList();
-                courses.add(dataSnapshot.getValue(Course.class));
+                Iterator<DataSnapshot> index = dataSnapshot.getChildren().iterator();
+                while (index.hasNext()) {
+                    courses.add(index.next().getValue(Course.class));
+                }
                 callback.onFinish(ServerResponse.success(courses));
             }
 
