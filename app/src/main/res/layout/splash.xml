@@ -11,9 +11,12 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:keepScreenOn="true"
-        android:text="Collge Helper"
+        android:text="@string/app_name"
         android:textColor="#ffffff"
         android:textSize="50sp"
         android:textStyle="bold" />
+
+
+
 
 </FrameLayout>
