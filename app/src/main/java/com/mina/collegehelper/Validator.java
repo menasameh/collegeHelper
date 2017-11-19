@@ -11,7 +11,7 @@ class regex {
     static String name = "^[a-z A-Z]{4,}$";
     static String email = "^[\\w-_\\.]+@\\w+\\.[a-z]{2,}$";
     static String password = ".{6,}";
-    static String code = "\\w{10}";
+    static String code = "\\w{14}";
 }
 
 public class Validator {
