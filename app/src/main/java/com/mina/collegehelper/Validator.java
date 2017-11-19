@@ -11,7 +11,7 @@ class regex {
     static String name = "^[a-z A-Z]{4,}$";
     static String email = "^[\\w-_\\.]+@\\w+\\.[a-z]{2,}$";
     static String password = ".{6,}";
-    static String code = "\\w{10}";
+    static String code = "\\w{14}";
 }
 
 public class Validator {
@@ -24,15 +24,11 @@ public class Validator {
         return validateRegex(email, regex.email);
     }
 
-    public static Boolean validatePassword(String password) {
-        return validateRegex(password, regex.password);
+    public static boolean validateCode(String code) {
+        return validateRegex(code, regex.code);
     }
 
     private static Boolean validateRegex(String value, String regex) {
         return Pattern.compile(regex).matcher(value).matches();
-    }
-
-    public static boolean validateCode(String code) {
-        return validateRegex(code, regex.code);
     }
 }

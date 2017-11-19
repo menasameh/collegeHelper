@@ -27,7 +27,6 @@ public class Registration extends BaseActivity {
     private String CODE_NOT_VALID_FOR_EMAIL = "This code is for another email address";
     private String INVALID_NAME = "Invalid or empty Name";
     private String INVALID_EMAIL = "Invalid or empty Email";
-    private String INVALID_PASSWORD = "Invalid or empty password";
     private String LOGIN_GENERAL_ERROR = "Can't Login,  try again later";
     private String INVALID_CODE = "Invalid code";
     private String USED_CODE = "This code was used before";
@@ -38,7 +37,6 @@ public class Registration extends BaseActivity {
     @BindView(R.id.profilePicture) ImageButton profilePictureImage;
     @BindView(R.id.nameTextView) TextView nameTextView;
     @BindView(R.id.emailTextView) TextView emailTextView;
-    @BindView(R.id.passwordTextView) TextView passwordTextView;
     @BindView(R.id.codeTextView) TextView codeTextView;
 
     @BindView(R.id.regButton) Button signUpButton;
@@ -46,7 +44,6 @@ public class Registration extends BaseActivity {
     ProgressDialog dialog;
     private String name;
     private String email;
-    private String password;
     private String code;
 
     private Uri profilePictureUrl;
@@ -123,7 +120,7 @@ public class Registration extends BaseActivity {
     }
 
     private void signUpUser() {
-        AuthenticationHelper.signup(email, password, new ServerCallback() {
+        AuthenticationHelper.signup(email, code, new ServerCallback() {
             @Override
             public void onFinish(ServerResponse response) {
                 if (response.success) {
@@ -181,7 +178,6 @@ public class Registration extends BaseActivity {
     private void collectParameters() {
         regUser = new User();
         email = emailTextView.getText().toString();
-        password = passwordTextView.getText().toString();
         name = nameTextView.getText().toString();
         code = codeTextView.getText().toString();
 //        email = "m@m.com";
@@ -194,21 +190,19 @@ public class Registration extends BaseActivity {
 
     private boolean validateParameters() {
         if (!Validator.validateName(name)) {
+            nameTextView.requestFocus();
             nameTextView.setError(INVALID_NAME);
             return false;
         }
 
         if (!Validator.validateEmail(email)) {
+            emailTextView.requestFocus();
             emailTextView.setError(INVALID_EMAIL);
             return false;
         }
 
-        if (!Validator.validatePassword(password)) {
-            passwordTextView.setError(INVALID_PASSWORD);
-            return false;
-        }
-
         if (!Validator.validateCode(code)) {
+            codeTextView.requestFocus();
             codeTextView.setError(INVALID_CODE);
             return false;
         }

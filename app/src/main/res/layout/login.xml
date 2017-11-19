@@ -31,13 +31,13 @@
      />
 
     <EditText
-        android:id="@+id/passwordTextView"
+        android:id="@+id/codeTextView"
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
         android:inputType="textPassword"
-        android:hint="Password"
+        android:hint="Code"
 
         android:layout_below="@id/emailTextView"
         android:layout_margin="20dp"
