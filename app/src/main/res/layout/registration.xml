@@ -46,18 +46,7 @@
 
         />
 
-    <EditText
-        android:id="@+id/passwordTextView"
 
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        android:inputType="textPassword"
-        android:hint="Password"
-
-        android:layout_below="@id/emailTextView"
-        android:layout_margin="15dp"
-        />
 
     <EditText
         android:id="@+id/codeTextView"
@@ -68,7 +57,7 @@
         android:inputType="textPassword"
         android:hint="Code"
 
-        android:layout_below="@id/passwordTextView"
+        android:layout_below="@id/emailTextView"
         android:layout_margin="15dp"
         />
 
