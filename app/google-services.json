@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "648746366975",
-    "firebase_url": "https://collegehelper-8b88e.firebaseio.com",
-    "project_id": "collegehelper-8b88e",
-    "storage_bucket": "collegehelper-8b88e.appspot.com"
+    "project_number": "976957163140",
+    "firebase_url": "https://easy-learn-for-college.firebaseio.com",
+    "project_id": "easy-learn-for-college",
+    "storage_bucket": "easy-learn-for-college.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:648746366975:android:ca53662b14fc6097",
+        "mobilesdk_app_id": "1:976957163140:android:ca53662b14fc6097",
         "android_client_info": {
           "package_name": "com.mina.collegehelper"
         }
       },
       "oauth_client": [
         {
-          "client_id": "648746366975-kf56ofe1u8m32cp45t7nmif0rti3s377.apps.googleusercontent.com",
+          "client_id": "976957163140-mh2c7ab2uev5vhbfq17knlo8eff4tit0.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAMA5aOlwJhwCR-BM4oMnhv6HY-A8yBlJI"
+          "current_key": "AIzaSyBl2fLBuBgxiz7pFEXT6yU_THkw9fDsPWk"
         }
       ],
       "services": {
