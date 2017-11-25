@@ -178,4 +178,30 @@ public class DatabaseHelper {
             }
         });
     }
+
+    public static void getCourseDetails(String courseId, final ServerCallback callback) {
+        DatabaseReference ref = database.getReference("courses").child(courseId);
+
+
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Course c = dataSnapshot.getValue(Course.class);
+                if(c != null){
+                    callback.onFinish(ServerResponse.success(c));
+                } else {
+                    callback.onFinish(ServerResponse.error("couldn't load course details"));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                callback.onFinish(ServerResponse.error(databaseError.getMessage()));
+            }
+        });
+    }
+
+
+
+
 }

@@ -3,4 +3,5 @@
     <string name="title_activity_home">Home</string>
 
     <string name="title_activity_splash">Splash</string>
+    <string name="title_activity_course_details">Course Details</string>
 </resources>

@@ -6,5 +6,8 @@ package com.mina.collegehelper;
 
 public class Utils {
 
+    public static class Constants {
+        public static String COURSE_ID = "course_id";
+    }
 
 }
