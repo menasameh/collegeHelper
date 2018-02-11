@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.mina.collegehelper.R;
 import com.mina.collegehelper.adapters.CoursesListAdapter;
 import com.mina.collegehelper.model.AuthenticationHelper;
@@ -47,7 +48,8 @@ public class Home extends BaseActivity {
     }
 
     private void loadCourses() {
-        DatabaseHelper.getUserCourses(new ServerCallback() {
+        String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseHelper.getUserCourses(currentUserId, new ServerCallback() {
             @Override
             public void onFinish(ServerResponse response) {
                 if(response.success) {

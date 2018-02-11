@@ -23,7 +23,9 @@ import com.mina.collegehelper.model.datastructure.Year;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Created by mina on 19/10/17.
@@ -160,20 +162,18 @@ public class DatabaseHelper {
         });
     }
 
-    public static void getUserCourses(final ServerCallback callback) {
-        DatabaseReference ref = database.getReference(COURSES_REF);
-
-
+    public static void getUserCourses(String userID, final ServerCallback callback) {
+        DatabaseReference ref = database.getReference(USERS_REF).child(userID);
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
-                ArrayList<Course> courses = new ArrayList();
-                Iterator<DataSnapshot> index = dataSnapshot.getChildren().iterator();
-                while (index.hasNext()) {
-                    courses.add(index.next().getValue(Course.class));
+                User u = dataSnapshot.getValue(User.class);
+                if(u != null) {
+                    ArrayList<String> ids = new ArrayList<>(u.courses.keySet());
+                    getCoursesByIds(ids, callback);
+                } else {
+                    callback.onFinish(ServerResponse.error("can't get courses"));
                 }
-                callback.onFinish(ServerResponse.success(courses));
             }
 
             @Override
@@ -207,15 +207,15 @@ public class DatabaseHelper {
 
     public static void getYears(final ServerCallback callback) {
         DatabaseReference ref = database.getReference(YEARS_REF);
-        final ArrayList<Year> years = new ArrayList<>();
+        final Map<String, Year> years = new HashMap<>();
 
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot item : dataSnapshot.getChildren()){
-                    years.add(item.getValue(Year.class));
+                    years.put(item.getKey(), item.getValue(Year.class));
                 }
-                callback.onFinish(ServerResponse.success(years));
+                callback.onFinish(ServerResponse.success(new ArrayList<>(years.values())));
             }
 
             @Override
@@ -226,16 +226,20 @@ public class DatabaseHelper {
     }
 
     public static void getYearCourses(Year year, final ServerCallback callback) {
-        final ArrayList<Course> courses = new ArrayList<>();
-        for (String courseID: year.courses.keySet()) {
+        getCoursesByIds(new ArrayList<>(year.courses.keySet()), callback);
+    }
+
+    private static void getCoursesByIds(ArrayList<String> ids, final ServerCallback callback) {
+        final Map<String, Course> courses = new HashMap<>();
+        for (String courseID: ids) {
             DatabaseReference ref = database.getReference(COURSES_REF).child(courseID);
             ref.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Course c = dataSnapshot.getValue(Course.class);
                     if(c != null){
-                        courses.add(c);
-                        callback.onFinish(ServerResponse.success(courses));
+                        courses.put(c.id, c);
+                        callback.onFinish(ServerResponse.success(new ArrayList<>(courses.values())));
                     }
                 }
 
