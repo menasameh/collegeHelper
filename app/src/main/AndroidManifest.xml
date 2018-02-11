@@ -30,7 +30,9 @@
         <activity
             android:name=".CourseDetails"
             android:label="@string/title_activity_course_details"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+        <activity android:name=".activities.Years" />
+        <activity android:name=".activities.YearCourses"></activity>
     </application>
 
 </manifest>

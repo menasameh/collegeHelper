@@ -19,6 +19,7 @@ import com.mina.collegehelper.model.datastructure.Code;
 import com.mina.collegehelper.model.datastructure.Course;
 import com.mina.collegehelper.model.datastructure.ServerCallback;
 import com.mina.collegehelper.model.datastructure.User;
+import com.mina.collegehelper.model.datastructure.Year;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -37,6 +38,9 @@ public class DatabaseHelper {
 
     private static String USERS_REF = "users";
     private static String CODES_REF = "codes";
+    private static String COURSES_REF = "courses";
+    private static String YEARS_REF = "years";
+
     private static String CODE_VALID_REF = "valid";
     private static String IMAGE_REF = "image";
 
@@ -157,7 +161,7 @@ public class DatabaseHelper {
     }
 
     public static void getUserCourses(final ServerCallback callback) {
-        DatabaseReference ref = database.getReference("courses");
+        DatabaseReference ref = database.getReference(COURSES_REF);
 
 
         ref.addValueEventListener(new ValueEventListener() {
@@ -180,7 +184,7 @@ public class DatabaseHelper {
     }
 
     public static void getCourseDetails(String courseId, final ServerCallback callback) {
-        DatabaseReference ref = database.getReference("courses").child(courseId);
+        DatabaseReference ref = database.getReference(COURSES_REF).child(courseId);
 
 
         ref.addValueEventListener(new ValueEventListener() {
@@ -201,6 +205,47 @@ public class DatabaseHelper {
         });
     }
 
+    public static void getYears(final ServerCallback callback) {
+        DatabaseReference ref = database.getReference(YEARS_REF);
+        final ArrayList<Year> years = new ArrayList<>();
+
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot item : dataSnapshot.getChildren()){
+                    years.add(item.getValue(Year.class));
+                }
+                callback.onFinish(ServerResponse.success(years));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                callback.onFinish(ServerResponse.error(databaseError.getMessage()));
+            }
+        });
+    }
+
+    public static void getYearCourses(Year year, final ServerCallback callback) {
+        final ArrayList<Course> courses = new ArrayList<>();
+        for (String courseID: year.courses.keySet()) {
+            DatabaseReference ref = database.getReference(COURSES_REF).child(courseID);
+            ref.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Course c = dataSnapshot.getValue(Course.class);
+                    if(c != null){
+                        courses.add(c);
+                        callback.onFinish(ServerResponse.success(courses));
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    callback.onFinish(ServerResponse.error(databaseError.getMessage()));
+                }
+            });
+        }
+    }
 
 
 
