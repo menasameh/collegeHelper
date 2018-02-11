@@ -19,10 +19,13 @@ import com.mina.collegehelper.model.datastructure.Code;
 import com.mina.collegehelper.model.datastructure.Course;
 import com.mina.collegehelper.model.datastructure.ServerCallback;
 import com.mina.collegehelper.model.datastructure.User;
+import com.mina.collegehelper.model.datastructure.Year;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Created by mina on 19/10/17.
@@ -37,6 +40,9 @@ public class DatabaseHelper {
 
     private static String USERS_REF = "users";
     private static String CODES_REF = "codes";
+    private static String COURSES_REF = "courses";
+    private static String YEARS_REF = "years";
+
     private static String CODE_VALID_REF = "valid";
     private static String IMAGE_REF = "image";
 
@@ -156,20 +162,18 @@ public class DatabaseHelper {
         });
     }
 
-    public static void getUserCourses(final ServerCallback callback) {
-        DatabaseReference ref = database.getReference("courses");
-
-
+    public static void getUserCourses(String userID, final ServerCallback callback) {
+        DatabaseReference ref = database.getReference(USERS_REF).child(userID);
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
-                ArrayList<Course> courses = new ArrayList();
-                Iterator<DataSnapshot> index = dataSnapshot.getChildren().iterator();
-                while (index.hasNext()) {
-                    courses.add(index.next().getValue(Course.class));
+                User u = dataSnapshot.getValue(User.class);
+                if(u != null) {
+                    ArrayList<String> ids = new ArrayList<>(u.courses.keySet());
+                    getCoursesByIds(ids, callback);
+                } else {
+                    callback.onFinish(ServerResponse.error("can't get courses"));
                 }
-                callback.onFinish(ServerResponse.success(courses));
             }
 
             @Override
@@ -178,4 +182,75 @@ public class DatabaseHelper {
             }
         });
     }
+
+    public static void getCourseDetails(String courseId, final ServerCallback callback) {
+        DatabaseReference ref = database.getReference(COURSES_REF).child(courseId);
+
+
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Course c = dataSnapshot.getValue(Course.class);
+                if(c != null){
+                    callback.onFinish(ServerResponse.success(c));
+                } else {
+                    callback.onFinish(ServerResponse.error("couldn't load course details"));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                callback.onFinish(ServerResponse.error(databaseError.getMessage()));
+            }
+        });
+    }
+
+    public static void getYears(final ServerCallback callback) {
+        DatabaseReference ref = database.getReference(YEARS_REF);
+        final Map<String, Year> years = new HashMap<>();
+
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot item : dataSnapshot.getChildren()){
+                    years.put(item.getKey(), item.getValue(Year.class));
+                }
+                callback.onFinish(ServerResponse.success(new ArrayList<>(years.values())));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                callback.onFinish(ServerResponse.error(databaseError.getMessage()));
+            }
+        });
+    }
+
+    public static void getYearCourses(Year year, final ServerCallback callback) {
+        getCoursesByIds(new ArrayList<>(year.courses.keySet()), callback);
+    }
+
+    private static void getCoursesByIds(ArrayList<String> ids, final ServerCallback callback) {
+        final Map<String, Course> courses = new HashMap<>();
+        for (String courseID: ids) {
+            DatabaseReference ref = database.getReference(COURSES_REF).child(courseID);
+            ref.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Course c = dataSnapshot.getValue(Course.class);
+                    if(c != null){
+                        courses.put(c.id, c);
+                        callback.onFinish(ServerResponse.success(new ArrayList<>(courses.values())));
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    callback.onFinish(ServerResponse.error(databaseError.getMessage()));
+                }
+            });
+        }
+    }
+
+
+
 }

@@ -59,8 +59,10 @@ public class Splash extends AppCompatActivity {
     }
 
     private void goToHome() {
+        //TODO: change default view to setting instead of static choice
+//        Intent homeIntent = new Intent(this, Years.class);
         Intent homeIntent = new Intent(this, Home.class);
         homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(homeIntent);
+        startActivity(homeIntent); 
     }
 }

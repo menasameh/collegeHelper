@@ -1,7 +1,6 @@
 package com.mina.collegehelper.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.mina.collegehelper.activities.CourseDetails;
 import com.mina.collegehelper.R;
-import com.mina.collegehelper.Utils;
-import com.mina.collegehelper.model.datastructure.Course;
+import com.mina.collegehelper.model.datastructure.User;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -21,26 +18,26 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by mina on 09/11/17.
+ * Created by mina on 25/11/17.
  */
 
-public class CoursesListAdapter extends BaseAdapter {
+public class UsersListAdapter extends BaseAdapter {
 
-    private ArrayList<Course> list;
+    private ArrayList<User> list;
     private Context context;
 
 
-    public CoursesListAdapter(Context context, ArrayList<Course> list) {
+    public UsersListAdapter(Context context, ArrayList<User> list) {
         this.list = list;
         this.context = context;
     }
 
-    public CoursesListAdapter(Context context) {
+    public UsersListAdapter(Context context) {
         this.list = new ArrayList();
         this.context = context;
     }
 
-    public void setList(ArrayList<Course> list) {
+    public void setList(ArrayList<User> list) {
         this.list = list;
     }
 
@@ -50,7 +47,7 @@ public class CoursesListAdapter extends BaseAdapter {
     }
 
     @Override
-    public Course getItem(int position) {
+    public User getItem(int position) {
         return list.get(position);
     }
 
@@ -72,22 +69,10 @@ public class CoursesListAdapter extends BaseAdapter {
             view.setTag(holder);
         }
 
-        final Course item = getItem(position);
+        User item = getItem(position);
 
         holder.name.setText(item.name);
-        holder.description.setText(item.description);
-
-        //TODO: add another listener for getting course posts
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(context, CourseDetails.class);
-                i.putExtra(Utils.Constants.COURSE_ID, item.id);
-                context.startActivity(i);
-            }
-        });
-
-        Picasso.with(context).load(item.imageUrl).into(holder.image);
+        Picasso.with(context).load(item.profilePictureUrl).into(holder.image);
 
         return view;
     }
@@ -95,9 +80,6 @@ public class CoursesListAdapter extends BaseAdapter {
     static class ViewHolder {
         @BindView(R.id.name)
         TextView name;
-
-        @BindView(R.id.description)
-        TextView description;
 
         @BindView(R.id.image)
         ImageView image;
