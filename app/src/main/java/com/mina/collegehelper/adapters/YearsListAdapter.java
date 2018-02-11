@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.mina.collegehelper.CourseDetails;
 import com.mina.collegehelper.R;
 import com.mina.collegehelper.Utils;
 import com.mina.collegehelper.activities.YearCourses;

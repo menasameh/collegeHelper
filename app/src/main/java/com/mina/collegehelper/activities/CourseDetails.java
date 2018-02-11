@@ -1,4 +1,4 @@
-package com.mina.collegehelper;
+package com.mina.collegehelper.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.mina.collegehelper.R;
+import com.mina.collegehelper.Utils;
 import com.mina.collegehelper.activities.BaseActivity;
 import com.mina.collegehelper.adapters.CoursesListAdapter;
 import com.mina.collegehelper.adapters.UsersListAdapter;
