@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.mina.collegehelper.activities.Home">
+    tools:context="com.mina.collegehelper.activities.UserCourses">
 
     <ListView
         android:id="@+id/coursesList"

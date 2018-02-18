@@ -12,7 +12,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".activities.Login" />
         <activity
-            android:name=".activities.Home"
+            android:name=".activities.UserCourses"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme" />
         <activity android:name=".activities.Registration" />
@@ -32,7 +32,8 @@
             android:label="@string/title_activity_course_details"
             android:theme="@style/AppTheme" />
         <activity android:name=".activities.Years" />
-        <activity android:name=".activities.YearCourses"></activity>
+        <activity android:name=".activities.YearCourses" />
+        <activity android:name=".activities.CoursePosts"></activity>
     </application>
 
 </manifest>

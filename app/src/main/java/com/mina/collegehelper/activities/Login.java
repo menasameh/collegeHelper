@@ -3,7 +3,6 @@ package com.mina.collegehelper.activities;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -12,7 +11,6 @@ import com.mina.collegehelper.Validator;
 import com.mina.collegehelper.model.AuthenticationHelper;
 import com.mina.collegehelper.model.ServerResponse;
 import com.mina.collegehelper.model.datastructure.ServerCallback;
-import com.mina.collegehelper.model.datastructure.User;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -101,7 +99,7 @@ public class Login extends BaseActivity {
     }
 
     private void goToHome() {
-        Intent homeIntent = new Intent(Login.this, Home.class);
+        Intent homeIntent = new Intent(Login.this, UserCourses.class);
         homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(homeIntent);
     }

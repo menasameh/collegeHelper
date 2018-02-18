@@ -17,6 +17,7 @@ import com.google.firebase.storage.UploadTask;
 import com.mina.collegehelper.Utils;
 import com.mina.collegehelper.model.datastructure.Code;
 import com.mina.collegehelper.model.datastructure.Course;
+import com.mina.collegehelper.model.datastructure.Post;
 import com.mina.collegehelper.model.datastructure.ServerCallback;
 import com.mina.collegehelper.model.datastructure.User;
 import com.mina.collegehelper.model.datastructure.Year;
@@ -41,6 +42,7 @@ public class DatabaseHelper {
     private static String USERS_REF = "users";
     private static String CODES_REF = "codes";
     private static String COURSES_REF = "courses";
+    private static String POSTS_REF = "coursePosts";
     private static String YEARS_REF = "years";
 
     private static String CODE_VALID_REF = "valid";
@@ -204,6 +206,27 @@ public class DatabaseHelper {
             }
         });
     }
+
+    public static void getCoursePosts(String courseId, final ServerCallback callback) {
+        DatabaseReference ref = database.getReference(POSTS_REF).child(courseId);
+        final Map<String, Post> posts = new HashMap<>();
+
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot item : dataSnapshot.getChildren()){
+                    posts.put(item.getKey(), item.getValue(Post.class));
+                }
+                callback.onFinish(ServerResponse.success(new ArrayList<>(posts.values())));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                callback.onFinish(ServerResponse.error(databaseError.getMessage()));
+            }
+        });
+    }
+
 
     public static void getYears(final ServerCallback callback) {
         DatabaseReference ref = database.getReference(YEARS_REF);
