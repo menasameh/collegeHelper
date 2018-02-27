@@ -56,10 +56,15 @@ public class UserCourses extends BaseActivity {
     }
 
 
-    @OnClick(R.id.fab)
+    @OnClick(R.id.signOut)
     public void signOut() {
         AuthenticationHelper.signOut();
         goToAuth();
+    }
+
+    @OnClick(R.id.settings)
+    public void openSettings() {
+        startActivity(new Intent(this, Settings.class));
     }
 
     private void goToAuth() {
