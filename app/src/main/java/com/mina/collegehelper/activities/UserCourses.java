@@ -67,6 +67,14 @@ public class UserCourses extends BaseActivity {
         startActivity(new Intent(this, Settings.class));
     }
 
+
+    @OnClick(R.id.years)
+    public void goToYears() {
+        Intent authIntent = new Intent(this, Years.class);
+        authIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(authIntent);
+    }
+
     private void goToAuth() {
         Intent authIntent = new Intent(this, Login.class);
         authIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

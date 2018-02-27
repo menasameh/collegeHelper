@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="screens">
+        <item>Years - Courses details</item>
+        <item>My Courses</item>
+    </string-array>
+
+    <string-array name="screensValues">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+</resources>

@@ -1,5 +1,6 @@
 package com.mina.collegehelper.activities;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ListView;
@@ -7,6 +8,7 @@ import android.widget.ListView;
 import com.mina.collegehelper.R;
 import com.mina.collegehelper.Utils;
 import com.mina.collegehelper.adapters.CoursesListAdapter;
+import com.mina.collegehelper.model.AuthenticationHelper;
 import com.mina.collegehelper.model.DatabaseHelper;
 import com.mina.collegehelper.model.ServerResponse;
 import com.mina.collegehelper.model.datastructure.Course;
@@ -17,6 +19,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class YearCourses extends BaseActivity {
 
@@ -59,6 +62,8 @@ public class YearCourses extends BaseActivity {
             }
         });
     }
+
+
 }
 
 

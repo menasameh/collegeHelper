@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.preference.PreferenceScreen
+xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:key="mainScreenChooser"
+        android:title="Choose Main Screen"
+        android:entries="@array/screens"
+        android:summary="@string/main_screen_chooser_summary"
+        android:entryValues="@array/screensValues"/>
+
+</android.support.v7.preference.PreferenceScreen>
