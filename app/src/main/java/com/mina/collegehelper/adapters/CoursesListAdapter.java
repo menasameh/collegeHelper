@@ -83,9 +83,10 @@ public class CoursesListAdapter extends BaseAdapter {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Class destination = openCourseDetails?CourseDetails.class:CoursePosts.class;
+                Class destination = openCourseDetails ? CourseDetails.class : CoursePosts.class;
                 Intent i = new Intent(context, destination);
                 i.putExtra(Utils.Constants.COURSE_ID, item.id);
+                i.putExtra(Utils.Constants.COURSE_NAME, item.name);
                 context.startActivity(i);
             }
         });

@@ -39,6 +39,8 @@ public class CoursePosts extends BaseActivity {
     }
 
     private void setupUI() {
+        String courseName = getIntent().getStringExtra(Utils.Constants.COURSE_NAME);
+        setTitle(courseName);
         postsListAdapter = new PostsListAdapter(this);
         postsList.setAdapter(postsListAdapter);
     }

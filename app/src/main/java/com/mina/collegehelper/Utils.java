@@ -8,6 +8,8 @@ public class Utils {
 
     public static class Constants {
         public static String COURSE_ID = "course_id";
+        public static String COURSE_NAME = "course_name";
+
         public static String YEAR = "year";
     }
 
