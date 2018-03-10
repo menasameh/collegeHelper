@@ -171,8 +171,12 @@ public class DatabaseHelper {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User u = dataSnapshot.getValue(User.class);
                 if(u != null) {
-                    ArrayList<String> ids = new ArrayList<>(u.courses.keySet());
-                    getCoursesByIds(ids, callback);
+                    if(u.courses != null) {
+                        ArrayList<String> ids = new ArrayList<>(u.courses.keySet());
+                        getCoursesByIds(ids, callback);
+                    } else {
+                        getCoursesByIds(new ArrayList<String>(), callback);
+                    }
                 } else {
                     callback.onFinish(ServerResponse.error("can't get courses"));
                 }
