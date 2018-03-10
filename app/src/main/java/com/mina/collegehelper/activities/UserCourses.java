@@ -81,4 +81,5 @@ public class UserCourses extends BaseActivity {
         startActivity(authIntent);
     }
 
+    public void onBackPressed(){}
 }
