@@ -1,9 +1,13 @@
 package com.mina.collegehelper.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.Preference;
+import android.support.v7.preference.PreferenceManager;
 import android.view.View;
 
 import com.mina.collegehelper.R;
@@ -59,9 +63,12 @@ public class Splash extends AppCompatActivity {
     }
 
     private void goToHome() {
-        //TODO: change default view to setting instead of static choice
-//        Intent homeIntent = new Intent(this, Years.class);
-        Intent homeIntent = new Intent(this, UserCourses.class);
+        SharedPreferences shareprefs = PreferenceManager.getDefaultSharedPreferences(this);
+        Resources resources = this.getResources();
+
+        String screenIndex = shareprefs.getString("mainScreenChooser", "0");
+        Class home = "0".equals(screenIndex) ? Years.class : UserCourses.class;
+        Intent homeIntent = new Intent(this, home);
         homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(homeIntent);
     }

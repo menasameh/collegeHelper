@@ -33,7 +33,8 @@
             android:theme="@style/AppTheme" />
         <activity android:name=".activities.Years" />
         <activity android:name=".activities.YearCourses" />
-        <activity android:name=".activities.CoursePosts"></activity>
+        <activity android:name=".activities.CoursePosts" />
+        <activity android:name=".activities.Settings"></activity>
     </application>
 
 </manifest>

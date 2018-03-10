@@ -4,4 +4,7 @@
 
     <string name="title_activity_splash">Easy Learn</string>
     <string name="title_activity_course_details">Course Details</string>
+    <string name="main_screen_chooser_summary">Choose the screen to show by default when you open up the app</string>
+
+
 </resources>

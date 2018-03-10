@@ -37,6 +37,13 @@
             fab:fab_label="Settings" />
 
         <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/years"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_size="mini"
+            fab:fab_label="Courses details" />
+
+        <com.github.clans.fab.FloatingActionButton
             android:id="@+id/signOut"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
