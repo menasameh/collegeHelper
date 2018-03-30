@@ -180,10 +180,6 @@ public class Registration extends BaseActivity {
         email = emailTextView.getText().toString();
         name = nameTextView.getText().toString();
         code = codeTextView.getText().toString();
-//        email = "m@m.com";
-//        password = "123456";
-//        name = "mina";
-//        code = "qwertyuiop";
         regUser.email = email;
         regUser.name = name;
     }
@@ -210,7 +206,6 @@ public class Registration extends BaseActivity {
     }
 
 // return from image picker
-
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
 

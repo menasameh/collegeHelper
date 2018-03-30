@@ -31,10 +31,13 @@
             android:name=".activities.CourseDetails"
             android:label="@string/title_activity_course_details"
             android:theme="@style/AppTheme" />
-        <activity android:name=".activities.Years" android:label="@string/title_activity_years" />
+        <activity
+            android:name=".activities.Years"
+            android:label="@string/title_activity_years" />
         <activity android:name=".activities.YearCourses" />
         <activity android:name=".activities.CoursePosts" />
-        <activity android:name=".activities.Settings"></activity>
+        <activity android:name=".activities.Settings" />
+        <activity android:name=".activities.AddPost"></activity>
     </application>
 
 </manifest>
