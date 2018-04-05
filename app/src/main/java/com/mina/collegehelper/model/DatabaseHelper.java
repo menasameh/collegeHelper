@@ -9,6 +9,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
 import com.google.firebase.storage.FirebaseStorage;
@@ -23,7 +24,13 @@ import com.mina.collegehelper.model.datastructure.User;
 import com.mina.collegehelper.model.datastructure.Year;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -44,9 +51,11 @@ public class DatabaseHelper {
     private static String COURSES_REF = "courses";
     private static String POSTS_REF = "coursePosts";
     private static String YEARS_REF = "years";
+    private static String TIMESTAMP_REF = "timestamp";
+
 
     private static String CODE_VALID_REF = "valid";
-    private static String IMAGE_REF = "image";
+    private static String IMAGE_REF = "profilePictureUrl";
 
     public static void getUsers(final ServerCallback callback) {
         DatabaseReference ref = database.getReference(USERS_REF);
@@ -87,6 +96,10 @@ public class DatabaseHelper {
         });
     }
 
+    public static void getCurrentUser(final ServerCallback callback) {
+        getUser(AuthenticationHelper.getCurrentUserId(), callback);
+    }
+
     public static void checkCode(final String id, final ServerCallback callback) {
         DatabaseReference ref = database.getReference(CODES_REF);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -109,6 +122,7 @@ public class DatabaseHelper {
 
     public static void useCode(String id, final ServerCallback callback) {
         DatabaseReference ref = database.getReference(CODES_REF).child(id).child(CODE_VALID_REF);
+        //TODO: change to false in production
         ref.setValue(true, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
@@ -221,7 +235,14 @@ public class DatabaseHelper {
                 for(DataSnapshot item : dataSnapshot.getChildren()){
                     posts.put(item.getKey(), item.getValue(Post.class));
                 }
-                callback.onFinish(ServerResponse.success(new ArrayList<>(posts.values())));
+                ArrayList<Post> postsList = new ArrayList<>(posts.values());
+                Collections.sort(postsList, new Comparator<Post>() {
+                    @Override
+                    public int compare(Post lhs, Post rhs) {
+                        return -1 * lhs.timestamp.compareTo(rhs.timestamp);
+                    }
+                });
+                callback.onFinish(ServerResponse.success(postsList));
             }
 
             @Override
@@ -278,6 +299,23 @@ public class DatabaseHelper {
         }
     }
 
+    public static void addPost(String courseID, String postText, final ServerCallback callback){
+        Post newPost = new Post();
+        newPost.teacherId = AuthenticationHelper.getCurrentUserId();
+        newPost.text = postText;
+        newPost.timestamp = System.currentTimeMillis() + "";
 
-
+        DatabaseReference ref = database.getReference(POSTS_REF).child(courseID);
+        ref.push().setValue(newPost).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                callback.onFinish(ServerResponse.success(""));
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                callback.onFinish(ServerResponse.error(e.getMessage()));
+            }
+        });
+    }
 }

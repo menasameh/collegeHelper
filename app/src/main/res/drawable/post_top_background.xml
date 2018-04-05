@@ -12,7 +12,7 @@
         android:color="#C4CDE0" >
     </stroke>
     <corners
-        android:topLeftRadius="20dp" android:topRightRadius="20dp"  >
+        android:topLeftRadius="5dp" android:topRightRadius="5dp"  >
     </corners>
 
 </shape>
