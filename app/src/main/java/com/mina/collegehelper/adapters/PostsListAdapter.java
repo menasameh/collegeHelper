@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mina.collegehelper.R;
 import com.mina.collegehelper.Utils;
@@ -20,7 +21,11 @@ import com.mina.collegehelper.model.datastructure.ServerCallback;
 import com.mina.collegehelper.model.datastructure.User;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -91,7 +96,10 @@ public class PostsListAdapter extends BaseAdapter {
         });
 
         holder.text.setText(item.text);
-        holder.timestamp.setText(item.timestamp);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM HH:mm", Locale.ENGLISH);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(Long.parseLong(item.timestamp));
+        holder.timestamp.setText(sdf.format(calendar.getTime()));
         return view;
     }
 
