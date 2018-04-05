@@ -57,6 +57,10 @@ public class DatabaseHelper {
     private static String CODE_VALID_REF = "valid";
     private static String IMAGE_REF = "profilePictureUrl";
 
+    public static void setupPersistence() {
+        database.setPersistenceEnabled(true);
+    }
+
     public static void getUsers(final ServerCallback callback) {
         DatabaseReference ref = database.getReference(USERS_REF);
 

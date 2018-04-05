@@ -12,6 +12,7 @@ import android.view.View;
 
 import com.mina.collegehelper.R;
 import com.mina.collegehelper.model.AuthenticationHelper;
+import com.mina.collegehelper.model.DatabaseHelper;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,9 +28,9 @@ public class Splash extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.splash);
         ButterKnife.bind(this);
+        DatabaseHelper.setupPersistence();
         setupUI();
         setupHandler();
     }
