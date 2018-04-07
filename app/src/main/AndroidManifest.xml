@@ -37,7 +37,7 @@
         <activity android:name=".activities.YearCourses" />
         <activity android:name=".activities.CoursePosts" />
         <activity android:name=".activities.Settings" />
-        <activity android:name=".activities.AddPost"></activity>
+        <activity android:name=".activities.AddPost" />
     </application>
 
 </manifest>
