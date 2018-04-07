@@ -1,21 +1,16 @@
 package com.mina.collegehelper.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mina.collegehelper.R;
-import com.mina.collegehelper.Utils;
-import com.mina.collegehelper.activities.CourseDetails;
 import com.mina.collegehelper.model.DatabaseHelper;
 import com.mina.collegehelper.model.ServerResponse;
-import com.mina.collegehelper.model.datastructure.Course;
 import com.mina.collegehelper.model.datastructure.Post;
 import com.mina.collegehelper.model.datastructure.ServerCallback;
 import com.mina.collegehelper.model.datastructure.User;
@@ -24,7 +19,6 @@ import com.squareup.picasso.Picasso;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 import butterknife.BindView;

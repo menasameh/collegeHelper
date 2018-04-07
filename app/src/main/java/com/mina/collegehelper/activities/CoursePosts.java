@@ -2,7 +2,6 @@ package com.mina.collegehelper.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.widget.ListView;
 
 import com.github.clans.fab.FloatingActionMenu;

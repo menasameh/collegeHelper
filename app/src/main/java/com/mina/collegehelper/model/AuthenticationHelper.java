@@ -1,6 +1,5 @@
 package com.mina.collegehelper.model;
 
-import android.content.Intent;
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;

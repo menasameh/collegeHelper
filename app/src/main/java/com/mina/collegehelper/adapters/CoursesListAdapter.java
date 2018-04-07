@@ -9,9 +9,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.mina.collegehelper.activities.CourseDetails;
 import com.mina.collegehelper.R;
 import com.mina.collegehelper.Utils;
+import com.mina.collegehelper.activities.CourseDetails;
 import com.mina.collegehelper.activities.CoursePosts;
 import com.mina.collegehelper.model.datastructure.Course;
 import com.squareup.picasso.Picasso;
