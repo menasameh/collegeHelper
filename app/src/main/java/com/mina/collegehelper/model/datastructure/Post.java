@@ -6,6 +6,8 @@ package com.mina.collegehelper.model.datastructure;
 
 public class Post {
 
+    public String id;
+
     public String teacherId;
     public String timestamp;
     public String text;

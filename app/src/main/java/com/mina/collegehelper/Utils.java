@@ -8,6 +8,9 @@ public class Utils {
 
     public static class Constants {
         public static String COURSE_ID = "course_id";
+        public static String POST_ID = "post_id";
+        public static String POST_TEXT = "post_text";
+
         public static String COURSE_NAME = "course_name";
 
         public static String YEAR = "year";

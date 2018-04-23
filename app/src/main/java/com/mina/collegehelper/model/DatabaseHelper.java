@@ -202,7 +202,6 @@ public class DatabaseHelper {
     public static void getCourseDetails(String courseId, final ServerCallback callback) {
         DatabaseReference ref = database.getReference(COURSES_REF).child(courseId);
 
-
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -223,13 +222,16 @@ public class DatabaseHelper {
 
     public static void getCoursePosts(String courseId, final ServerCallback callback) {
         DatabaseReference ref = database.getReference(POSTS_REF).child(courseId);
-        final Map<String, Post> posts = new HashMap<>();
+
 
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                final Map<String, Post> posts = new HashMap<>();
                 for(DataSnapshot item : dataSnapshot.getChildren()){
-                    posts.put(item.getKey(), item.getValue(Post.class));
+                    Post current = item.getValue(Post.class);
+                    current.id = item.getKey();
+                    posts.put(item.getKey(), current);
                 }
                 ArrayList<Post> postsList = new ArrayList<>(posts.values());
                 Collections.sort(postsList, new Comparator<Post>() {
@@ -247,7 +249,6 @@ public class DatabaseHelper {
             }
         });
     }
-
 
     public static void getYears(final ServerCallback callback) {
         DatabaseReference ref = database.getReference(YEARS_REF);
@@ -313,5 +314,37 @@ public class DatabaseHelper {
                 callback.onFinish(ServerResponse.error(e.getMessage()));
             }
         });
+    }
+
+    public static void editPost(String courseID, String postId, String postText, final ServerCallback callback){
+        Post newPost = new Post();
+        newPost.teacherId = AuthenticationHelper.getCurrentUserId();
+        newPost.text = postText;
+        newPost.timestamp = System.currentTimeMillis() + "";
+
+        DatabaseReference ref = database.getReference(POSTS_REF).child(courseID);
+        ref.child(postId).setValue(newPost).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                callback.onFinish(ServerResponse.success(""));
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                callback.onFinish(ServerResponse.error(e.getMessage()));
+            }
+        });
+    }
+
+    public static void deletePost(String courseID, String postId, final ServerCallback callback){
+
+        DatabaseReference ref = database.getReference(POSTS_REF).child(courseID).child(postId);
+        ref.removeValue(new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                callback.onFinish(ServerResponse.success(""));
+            }
+        });
+
     }
 }

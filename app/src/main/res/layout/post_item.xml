@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/post"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="20dp"
@@ -7,6 +8,7 @@
     android:orientation="vertical">
 
     <RelativeLayout
+        android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
@@ -50,6 +52,8 @@
             android:text="10/12/2018"
             android:textSize="16sp" />
 
+
+
     </RelativeLayout>
     <TextView
         android:id="@+id/text"
@@ -59,6 +63,32 @@
         android:text="post text"
         android:textSize="20sp"
 
+        android:layout_below="@+id/header"
+
         android:layout_margin="20dp"
         />
-</LinearLayout>
+    <ImageView
+        android:id="@+id/edit"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+
+        android:layout_margin="10dp"
+        android:visibility="invisible"
+
+        android:src="@drawable/edit_post"
+        />
+
+    <ImageView
+        android:id="@+id/delete"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:visibility="invisible"
+
+        android:layout_margin="10dp"
+
+        android:src="@drawable/delete_post"
+        />
+</RelativeLayout>

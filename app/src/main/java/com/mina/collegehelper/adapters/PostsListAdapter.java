@@ -1,6 +1,9 @@
 package com.mina.collegehelper.adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mina.collegehelper.R;
+import com.mina.collegehelper.Utils;
+import com.mina.collegehelper.activities.AddPost;
 import com.mina.collegehelper.model.DatabaseHelper;
 import com.mina.collegehelper.model.ServerResponse;
 import com.mina.collegehelper.model.datastructure.Post;
@@ -23,6 +28,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by mina on 09/11/17.
@@ -30,6 +36,8 @@ import butterknife.ButterKnife;
 
 public class PostsListAdapter extends BaseAdapter {
 
+    private String courseId;
+    private boolean isDoctor;
     private ArrayList<Post> list;
     private Context context;
 
@@ -39,9 +47,11 @@ public class PostsListAdapter extends BaseAdapter {
         this.context = context;
     }
 
-    public PostsListAdapter(Context context) {
+    public PostsListAdapter(Context context, String courseId, boolean isDoctor) {
         this.list = new ArrayList();
         this.context = context;
+        this.courseId = courseId;
+        this.isDoctor = isDoctor;
     }
 
     public void setList(ArrayList<Post> list) {
@@ -89,6 +99,10 @@ public class PostsListAdapter extends BaseAdapter {
             }
         });
 
+        holder.context = context;
+        holder.postId = item.id;
+        holder.courseId = courseId;
+        holder.isDoctor = isDoctor;
         holder.text.setText(item.text);
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM HH:mm", Locale.ENGLISH);
         Calendar calendar = Calendar.getInstance();
@@ -98,6 +112,11 @@ public class PostsListAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
+        public String postId;
+        public String courseId;
+        public Context context;
+        public boolean isDoctor;
+
         @BindView(R.id.name)
         TextView name;
 
@@ -109,6 +128,55 @@ public class PostsListAdapter extends BaseAdapter {
 
         @BindView(R.id.image)
         ImageView image;
+
+        @BindView(R.id.edit)
+        ImageView edit;
+
+        @BindView(R.id.delete)
+        ImageView delete;
+
+        @OnClick(R.id.post)
+        public void toggleActionsVisibility() {
+            if(!isDoctor) return;
+            if(edit.getVisibility() == View.VISIBLE) {
+                edit.setVisibility(View.INVISIBLE);
+                delete.setVisibility(View.INVISIBLE);
+            } else {
+                edit.setVisibility(View.VISIBLE);
+                delete.setVisibility(View.VISIBLE);
+            }
+        }
+
+        @OnClick(R.id.edit)
+        public void editPost() {
+            if(!isDoctor) return;
+            toggleActionsVisibility();
+            Intent editPost = new Intent(context, AddPost.class);
+            editPost.putExtra(Utils.Constants.COURSE_ID, courseId);
+            editPost.putExtra(Utils.Constants.POST_ID, postId);
+            editPost.putExtra(Utils.Constants.POST_TEXT, text.getText().toString());
+            context.startActivity(editPost);
+        }
+
+        @OnClick(R.id.delete)
+        public void removePost() {
+            if(!isDoctor) return;
+
+            new AlertDialog.Builder(context)
+                    .setTitle("Delete Post")
+                    .setMessage("Are you sure you want to Delete Post?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            DatabaseHelper.deletePost(courseId, postId, new ServerCallback() {
+                                @Override
+                                public void onFinish(ServerResponse response) {
+
+                                }
+                            });
+                        }
+                    }).setNegativeButton("No", null).show();
+        }
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);

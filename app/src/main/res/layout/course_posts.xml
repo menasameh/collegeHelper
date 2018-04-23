@@ -16,15 +16,18 @@
         android:divider="@android:color/transparent"
         android:dividerHeight="10.0sp" />
 
-    <fab:com.github.clans.fab.FloatingActionMenu
+    <Button
         android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+
+        android:background="@drawable/plus"
 
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_margin="@dimen/fab_margin"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        />
 
 </RelativeLayout>

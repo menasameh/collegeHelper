@@ -1,7 +1,10 @@
 package com.mina.collegehelper.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.github.clans.fab.FloatingActionMenu;
@@ -25,7 +28,7 @@ public class CoursePosts extends BaseActivity {
     @BindView(R.id.postsList)
     ListView postsList;
     @BindView(R.id.fab)
-    FloatingActionMenu fab;
+    Button fab;
     PostsListAdapter postsListAdapter;
 
     @Override
@@ -39,23 +42,26 @@ public class CoursePosts extends BaseActivity {
 
     private void setupUI() {
         String courseName = getIntent().getStringExtra(Utils.Constants.COURSE_NAME);
+        final String courseId = getIntent().getStringExtra(Utils.Constants.COURSE_ID);
         setTitle(courseName);
+        final Context that = this;
         DatabaseHelper.getCurrentUser(new ServerCallback() {
             @Override
             public void onFinish(ServerResponse response) {
+                boolean isDoctor =false;
                 if (response.success) {
-                    User u = (User) response.data;
-                    if (u.type.equals("doctor"))
-                        fab.showMenu(false);
+                    isDoctor = ((User) response.data).type.equals("doctor");
+                    if (isDoctor)
+                        fab.setVisibility(View.VISIBLE);
                     else
-                        fab.hideMenu(false);
+                        fab.setVisibility(View.INVISIBLE);
                 } else {
-                    fab.hideMenu(false);
+                    fab.setVisibility(View.INVISIBLE);
                 }
+                postsListAdapter = new PostsListAdapter(that, courseId, isDoctor);
+                postsList.setAdapter(postsListAdapter);
             }
         });
-        postsListAdapter = new PostsListAdapter(this);
-        postsList.setAdapter(postsListAdapter);
     }
 
     private void loadCourses() {
