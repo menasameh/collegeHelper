@@ -168,6 +168,7 @@ public class PostsListAdapter extends BaseAdapter {
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            toggleActionsVisibility();
                             DatabaseHelper.deletePost(courseId, postId, new ServerCallback() {
                                 @Override
                                 public void onFinish(ServerResponse response) {
