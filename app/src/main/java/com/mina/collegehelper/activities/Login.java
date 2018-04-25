@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.mina.collegehelper.R;
 import com.mina.collegehelper.Validator;
 import com.mina.collegehelper.model.AuthenticationHelper;
+import com.mina.collegehelper.model.DatabaseHelper;
 import com.mina.collegehelper.model.ServerResponse;
 import com.mina.collegehelper.model.datastructure.ServerCallback;
 
@@ -80,6 +81,7 @@ public class Login extends BaseActivity {
                 dialog.hide();
                 if (response.success) {
                     if (isEmailVerified()) {
+                        DatabaseHelper.toggleSubscription(true);
                         goToHome();
                     }
                 } else {

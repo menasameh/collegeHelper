@@ -5,17 +5,20 @@ import android.support.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.mina.collegehelper.model.datastructure.Code;
 import com.mina.collegehelper.model.datastructure.Course;
 import com.mina.collegehelper.model.datastructure.Post;
+import com.mina.collegehelper.model.datastructure.PostNotification;
 import com.mina.collegehelper.model.datastructure.ServerCallback;
 import com.mina.collegehelper.model.datastructure.User;
 import com.mina.collegehelper.model.datastructure.Year;
@@ -30,7 +33,6 @@ import java.util.Map;
 /**
  * Created by mina on 19/10/17.
  */
-//TODO: check if firebase listens for more than one time
 public class DatabaseHelper {
 
     private static String CODE_NOT_FOUND = "Code is not available";
@@ -44,6 +46,8 @@ public class DatabaseHelper {
     private static String POSTS_REF = "coursePosts";
     private static String YEARS_REF = "years";
     private static String TIMESTAMP_REF = "timestamp";
+    private static String NOTIFICATIONS_REF = "notifications";
+
 
 
     private static String CODE_VALID_REF = "valid";
@@ -314,6 +318,14 @@ public class DatabaseHelper {
                 callback.onFinish(ServerResponse.error(e.getMessage()));
             }
         });
+
+        PostNotification postNotification = new PostNotification();
+        postNotification.courseId = courseID;
+        postNotification.teacherId = newPost.teacherId;
+        postNotification.text = newPost.text;
+
+        database.getReference(NOTIFICATIONS_REF)
+                .push().setValue(postNotification);
     }
 
     public static void editPost(String courseID, String postId, String postText, final ServerCallback callback){
@@ -346,5 +358,29 @@ public class DatabaseHelper {
             }
         });
 
+    }
+
+    public static void toggleSubscription(final boolean subscribe) {
+        String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference ref = database.getReference(USERS_REF).child(currentUserId);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User u = dataSnapshot.getValue(User.class);
+                if(u != null && u.courses != null) {
+                    ArrayList<String> ids = new ArrayList<>(u.courses.keySet());
+                    for(int i=0;i<ids.size();i++) {
+                        if(subscribe)
+                            FirebaseMessaging.getInstance().subscribeToTopic(ids.get(i));
+                        else
+                            FirebaseMessaging.getInstance().unsubscribeFromTopic(ids.get(i));
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
     }
 }

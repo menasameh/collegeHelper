@@ -4,17 +4,33 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/notification_icon" />
+        <meta-data android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
+        <service
+            android:name=".services.NotificationHandler">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
         <activity android:name=".activities.Login" />
         <activity
             android:name=".activities.UserCourses"
             android:label="@string/title_activity_user_courses"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme" >
+            <intent-filter>
+                <action android:name="open_my_courses" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity android:name=".activities.Registration" />
         <activity
             android:name=".activities.Splash"

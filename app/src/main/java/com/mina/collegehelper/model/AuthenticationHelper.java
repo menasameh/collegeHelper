@@ -42,6 +42,7 @@ public class AuthenticationHelper {
     }
 
     public static void signOut() {
+        DatabaseHelper.toggleSubscription(false);
         authRef.signOut();
     }
 
