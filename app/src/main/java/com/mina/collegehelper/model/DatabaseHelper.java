@@ -122,8 +122,7 @@ public class DatabaseHelper {
 
     public static void useCode(String id, final ServerCallback callback) {
         DatabaseReference ref = database.getReference(CODES_REF).child(id).child(CODE_VALID_REF);
-        //TODO: change to false in production
-        ref.setValue(true, new DatabaseReference.CompletionListener() {
+        ref.setValue(false, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                 if(databaseError == null) {
