@@ -182,6 +182,7 @@ public class Registration extends BaseActivity {
         code = codeTextView.getText().toString();
         regUser.email = email;
         regUser.name = name;
+        regUser.code = code;
     }
 
     private boolean validateParameters() {

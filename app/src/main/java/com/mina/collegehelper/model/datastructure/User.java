@@ -14,10 +14,11 @@ public class User {
 
     public String id;
     public String name;
+    public String code;
     public String email;
     public String type;
     public String profilePictureUrl;
-    public Map<String, Boolean> courses;
+
 
     public User() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)

@@ -2,6 +2,7 @@ package com.mina.collegehelper.model;
 
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -54,7 +55,11 @@ public class DatabaseHelper {
     private static String IMAGE_REF = "profilePictureUrl";
 
     public static void setupPersistence() {
-        database.setPersistenceEnabled(true);
+        try {
+            database.setPersistenceEnabled(true);
+        } catch(Exception e) {
+            Log.d("log", e.getLocalizedMessage());
+        }
     }
 
     public static void getUsers(final ServerCallback callback) {
@@ -179,17 +184,29 @@ public class DatabaseHelper {
 
     public static void getUserCourses(String userID, final ServerCallback callback) {
         DatabaseReference ref = database.getReference(USERS_REF).child(userID);
-        ref.addValueEventListener(new ValueEventListener() {
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User u = dataSnapshot.getValue(User.class);
                 if(u != null) {
-                    if(u.courses != null) {
-                        ArrayList<String> ids = new ArrayList<>(u.courses.keySet());
-                        getCoursesByIds(ids, callback);
-                    } else {
-                        getCoursesByIds(new ArrayList<String>(), callback);
-                    }
+                    DatabaseReference ref = database.getReference(CODES_REF).child(u.code);
+                    ref.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot snapshot) {
+                            Code c = snapshot.getValue(Code.class);
+                            if(c.courses != null) {
+                                ArrayList<String> ids = new ArrayList<>(c.courses.keySet());
+                                getCoursesByIds(ids, callback);
+                            } else {
+                            getCoursesByIds(new ArrayList<String>(), callback);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            callback.onFinish(ServerResponse.error(databaseError.getMessage()));
+                        }
+                    });
                 } else {
                     callback.onFinish(ServerResponse.error("can't get courses"));
                 }
@@ -366,14 +383,27 @@ public class DatabaseHelper {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User u = dataSnapshot.getValue(User.class);
-                if(u != null && u.courses != null) {
-                    ArrayList<String> ids = new ArrayList<>(u.courses.keySet());
-                    for(int i=0;i<ids.size();i++) {
-                        if(subscribe)
-                            FirebaseMessaging.getInstance().subscribeToTopic(ids.get(i));
-                        else
-                            FirebaseMessaging.getInstance().unsubscribeFromTopic(ids.get(i));
-                    }
+                if(u != null) {
+                    DatabaseReference ref = database.getReference(CODES_REF).child(u.code);
+                    ref.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot snapshot) {
+                            Code c = snapshot.getValue(Code.class);
+                            if(c.courses != null) {
+                                ArrayList<String> ids = new ArrayList<>(c.courses.keySet());
+                                for(int i=0;i<ids.size();i++) {
+                                    if(subscribe)
+                                        FirebaseMessaging.getInstance().subscribeToTopic(ids.get(i));
+                                    else
+                                        FirebaseMessaging.getInstance().unsubscribeFromTopic(ids.get(i));
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                        }
+                    });
                 }
             }
 
